@@ -1,7 +1,6 @@
 package com.company.Controladores;
 
 import com.company.Pieza;
-import com.company.Proveedor;
 import com.company.utils.HibernateUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -162,19 +161,23 @@ public class ControladorPieza {
         return p;
     }
 
-    public List<Pieza> selectByCodigo(String recibo){
-        List<Pieza> listaEntontrados = new ArrayList<>();
+    public List selectByCodigo(String recibo, String consultaDe) {
 
-      // String consulta = "from  pieza where CODPIEZA  like  %recibo%";
+        // Ejemplo consulta : select * from pieza where CODPIEZA like '%2a%';
 
-        String consulta = "from pieza where codpieza like :recibo";
+        List<Pieza> listaEntontrados;
 
 
-        Query q = session.createSQLQuery(consulta);
-        Query q1 = session.createQuery(consulta);
+        //He tenido que construir la sentencia de esta forma. No me funcionaba :cod + q.setParameter
+        String consulta = "from Pieza  where " + consultaDe + " like '%" + recibo + "%'";
 
-        q1.setParameter(recibo, "%recibo%");
+        // String consulta = "from Pieza  where codpieza like :cod";
+        Query q = session.createQuery(consulta);
 
+        //    q.setParameter("cod", "'%recibo%'");
+        System.out.println(q.getQueryString());
+
+        listaEntontrados = q.list();
 
         return listaEntontrados;
     }

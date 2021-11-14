@@ -57,7 +57,7 @@ public class VentanaInicio {
 
         JMenuItem itemCodigoPi = new JMenuItem("Por Codigo");
         JMenuItem itemNombrePi = new JMenuItem("Por Nombre");
-        JMenuItem itemDireccionPi = new JMenuItem("Por Dirección");
+
 
         MenuPiezas.add(itemAltaPieza);
         MenuPiezas.add(itemModificacionPieza);
@@ -66,7 +66,7 @@ public class VentanaInicio {
 
         itemConsultaPiezas.add(itemCodigoPi);
         itemConsultaPiezas.add(itemNombrePi);
-        itemConsultaPiezas.add(itemDireccionPi);
+
         MenuPiezas.add(itemConsultaPiezas);
         menuBar.add(MenuPiezas);
 
@@ -200,15 +200,16 @@ public class VentanaInicio {
         itemCodigoPi.addActionListener(e -> {
 
             BuscarPieza buscarPiezaXCodigo = new BuscarPieza();
+            buscarPiezaXCodigo.consulta = "codpieza";
             mostrarPanel(buscarPiezaXCodigo.getJPBuscarPieza());
 
         });
         itemNombrePi.addActionListener(e -> {
-
+            BuscarPieza buscarPiezaXNombre = new BuscarPieza();
+            buscarPiezaXNombre.consulta="nombre";
+            mostrarPanel(buscarPiezaXNombre.getJPBuscarPieza());
         });
-        itemDireccionPi.addActionListener(e -> {
 
-        });
 
 
         /** Menu Gestion Global  */
