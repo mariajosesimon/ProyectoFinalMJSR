@@ -70,8 +70,6 @@ public class ControladorPieza {
          *  al txt para detectar cuando se pulsa una tecla que sea numero
          * */
 
-        System.out.println("Codigo" + p.getCodpieza() + "/");
-
         Boolean error = true;
         HashMap<String, String> errores = new HashMap<>();
 
@@ -87,12 +85,12 @@ public class ControladorPieza {
 
         List<Pieza> listado = new ArrayList<>();
         listado = selectAll();
+        if(!(p.getIdpieza() >=0 )){
         for (Pieza e : listado) {
             if (e.getCodpieza().equals(p.getCodpieza())) {
                 errores.put("Codigo", "Codigo duplicado");
             }
-
-        }
+        }}
 
         //Datos de tipo String
         if (p.getNombre().length() > 20 || p.getNombre().equals("")) {
@@ -137,7 +135,6 @@ public class ControladorPieza {
 
         }
 
-        session.close();
         return enviarListaPiezas;
     }
 
@@ -161,7 +158,7 @@ public class ControladorPieza {
         return p;
     }
 
-    public List selectByCodigo(String recibo, String consultaDe) {
+    public List selectByCodigo(String recibo, String consultaDe, String tabla) {
 
         // Ejemplo consulta : select * from pieza where CODPIEZA like '%2a%';
 
@@ -169,7 +166,7 @@ public class ControladorPieza {
 
 
         //He tenido que construir la sentencia de esta forma. No me funcionaba :cod + q.setParameter
-        String consulta = "from Pieza  where " + consultaDe + " like '%" + recibo + "%'";
+        String consulta = "from " + tabla +"  where " + consultaDe + " like '%" + recibo + "%'";
 
         // String consulta = "from Pieza  where codpieza like :cod";
         Query q = session.createQuery(consulta);

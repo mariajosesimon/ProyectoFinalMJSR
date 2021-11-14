@@ -25,6 +25,7 @@ public class VistaPiezas {
 
             Pieza pieza = new Pieza();
 
+            pieza.setIdpieza(Integer.parseInt(String.valueOf(lbIDPieza.getText())));
             pieza.setCodpieza(txtCodigo.getText().toUpperCase());
             pieza.setNombre(txtNombre.getText().toUpperCase());
             pieza.setPrecio(Double.parseDouble(txtPrecio.getText()));

@@ -24,26 +24,9 @@ public class VentanaInicio {
 
         JMenuBar menuBar = new JMenuBar();
 
+        /********************Menu Base de datos*****************/
         JMenu MenuBaseDatos = new JMenu("Base de Datos");
-        JMenu MenuGestionGlobal = new JMenu("Gestión Global");
-        JMenu MenuAyuda = new JMenu("Ayuda");
-
-
-        JMenuItem itemPPP = new JMenuItem("Pieza, Proveedores y Proyectos");
-        JMenuItem itemSuministrosProveedor = new JMenuItem("Suministros por Proveedor");
-        JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Pieza");
-        JMenuItem itemEstadisticas = new JMenuItem("Estadísticas");
-
-
-        MenuGestionGlobal.add(itemPPP);
-        MenuGestionGlobal.add(itemSuministrosProveedor);
-        MenuGestionGlobal.add(itemSuministrosPiezas);
-        MenuGestionGlobal.add(itemEstadisticas);
-
-
         menuBar.add(MenuBaseDatos);
-        menuBar.add(MenuGestionGlobal);
-        menuBar.add(MenuAyuda);
 
 
         /********************Menu Pieza*****************/
@@ -57,7 +40,6 @@ public class VentanaInicio {
 
         JMenuItem itemCodigoPi = new JMenuItem("Por Codigo");
         JMenuItem itemNombrePi = new JMenuItem("Por Nombre");
-
 
         MenuPiezas.add(itemAltaPieza);
         MenuPiezas.add(itemModificacionPieza);
@@ -74,6 +56,7 @@ public class VentanaInicio {
         JMenu MenuProveedores = new JMenu("Proveedores");
         JMenuItem itemAltaProveedor = new JMenuItem("Alta");
         JMenuItem itemBajaProveedor = new JMenuItem("Baja");
+        JMenuItem itemListadoProveedor = new JMenuItem("Listado");
         JMenuItem itemModificacionProveedor = new JMenuItem("Modificacion");
         JMenu itemConsultaProveedores = new JMenu("Consulta de Proveedores");
 
@@ -82,8 +65,9 @@ public class VentanaInicio {
         JMenuItem itemDireccionProv = new JMenuItem("Por Dirección");
 
         MenuProveedores.add(itemAltaProveedor);
-        MenuProveedores.add(itemBajaProveedor);
         MenuProveedores.add(itemModificacionProveedor);
+        MenuProveedores.add(itemBajaProveedor);
+        MenuProveedores.add(itemListadoProveedor);
 
         itemConsultaProveedores.add(itemCodigoProv);
         itemConsultaProveedores.add(itemNombreProv);
@@ -94,11 +78,46 @@ public class VentanaInicio {
         /***********************Menu Proyectos*********************/
 
         JMenu MenuProyectos = new JMenu("Proyectos");
+        JMenuItem itemAltaProyecto = new JMenuItem("Alta");
+        JMenuItem itemBajaProyecto = new JMenuItem("Baja");
+        JMenuItem itemListadoProyecto = new JMenuItem("Listadp");
+        JMenuItem itemModificacionProyecto = new JMenuItem("Modificacion");
+        JMenu itemConsultaProyectos = new JMenu("Consulta de Proyectoes");
 
+        JMenuItem itemCodigoProy = new JMenuItem("Por Codigo");
+        JMenuItem itemNombreProy = new JMenuItem("Por Nombre");
+        JMenuItem itemDireccionProy = new JMenuItem("Por Dirección");
+
+        MenuProyectos.add(itemAltaProyecto);
+        MenuProyectos.add(itemModificacionProyecto);
+        MenuProyectos.add(itemBajaProyecto);
+        MenuProyectos.add(itemListadoProyecto);
+
+        itemConsultaProyectos.add(itemCodigoProy);
+        itemConsultaProyectos.add(itemNombreProy);
+        itemConsultaProyectos.add(itemDireccionProy);
+        MenuProyectos.add(itemConsultaProyectos);
         menuBar.add(MenuProyectos);
 
         /*****************************************************************************/
 
+        JMenu MenuGestionGlobal = new JMenu("Gestión Global");
+        JMenu MenuAyuda = new JMenu("Ayuda");
+
+
+        JMenuItem itemPPP = new JMenuItem("Pieza, Proveedores y Proyectos");
+        JMenuItem itemSuministrosProveedor = new JMenuItem("Suministros por Proveedor");
+        JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Pieza");
+        JMenuItem itemEstadisticas = new JMenuItem("Estadísticas");
+
+
+        MenuGestionGlobal.add(itemPPP);
+        MenuGestionGlobal.add(itemSuministrosProveedor);
+        MenuGestionGlobal.add(itemSuministrosPiezas);
+        MenuGestionGlobal.add(itemEstadisticas);
+
+        menuBar.add(MenuGestionGlobal);
+        menuBar.add(MenuAyuda);
 
         frame.add(menuBar); //Añadir el menu bar al frame. Se tiene que añadir al frame principal porque de este se arrastra a todos.
         frame.setJMenuBar(menuBar);
@@ -120,9 +139,6 @@ public class VentanaInicio {
             mostrarPanel(alta.getJPProveedor());
 
         });
-        itemBajaProveedor.addActionListener(e -> {
-
-        });
         itemModificacionProveedor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,24 +149,32 @@ public class VentanaInicio {
                 mostrarPanel(modificacion.getJPProveedor());
             }
         });
+        itemBajaProveedor.addActionListener(e -> {
 
-        itemCodigoProv.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
         });
-        itemNombreProv.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
+        itemListadoProveedor.addActionListener(e -> {
+            ListarProveedores listado = new ListarProveedores();
+            cproveedor = new ControladorProveedor();
+            listado.setListaProveedores(cproveedor.selectAll());
+            mostrarPanel(listado.getJPProveedorListado());
         });
-        itemDireccionProv.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
+        itemCodigoProv.addActionListener(e -> {
+            Buscar buscarProveedorXCodigo = new Buscar();
+            buscarProveedorXCodigo.consulta = "codproveedor";
+            buscarProveedorXCodigo.tabla="Proveedor";
+            mostrarPanel(buscarProveedorXCodigo.getJPBuscar());
+        });
+        itemNombreProv.addActionListener(e -> {
+            Buscar buscarProveedorXNombre = new Buscar();
+            buscarProveedorXNombre.consulta = "nombre";
+            buscarProveedorXNombre.tabla="Proveedor";
+            mostrarPanel(buscarProveedorXNombre.getJPBuscar());
+        });
+        itemDireccionProv.addActionListener(e -> {
+            Buscar buscarProveedorXDireccion = new Buscar();
+            buscarProveedorXDireccion.consulta = "direccion";
+            buscarProveedorXDireccion.tabla="Proveedor";
+            mostrarPanel(buscarProveedorXDireccion.getJPBuscar());
         });
 
 
@@ -188,7 +212,6 @@ public class VentanaInicio {
                 mostrarPanel(modificacion.getJPPieza());
             }
         });
-
         itemListadoPieza.addActionListener(e -> {
             /*Necesito recuperar todas las piezas para mostrar en el listado
              * */
@@ -199,15 +222,17 @@ public class VentanaInicio {
         });
         itemCodigoPi.addActionListener(e -> {
 
-            BuscarPieza buscarPiezaXCodigo = new BuscarPieza();
+            Buscar buscarPiezaXCodigo = new Buscar();
+            buscarPiezaXCodigo.tabla="Pieza";
             buscarPiezaXCodigo.consulta = "codpieza";
-            mostrarPanel(buscarPiezaXCodigo.getJPBuscarPieza());
+            mostrarPanel(buscarPiezaXCodigo.getJPBuscar());
 
         });
         itemNombrePi.addActionListener(e -> {
-            BuscarPieza buscarPiezaXNombre = new BuscarPieza();
+            Buscar buscarPiezaXNombre = new Buscar();
+            buscarPiezaXNombre.tabla="Pieza";
             buscarPiezaXNombre.consulta="nombre";
-            mostrarPanel(buscarPiezaXNombre.getJPBuscarPieza());
+            mostrarPanel(buscarPiezaXNombre.getJPBuscar());
         });
 
 

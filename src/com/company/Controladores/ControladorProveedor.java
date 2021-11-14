@@ -2,6 +2,7 @@ package com.company.Controladores;
 
 import com.company.Proveedor;
 import com.company.utils.HibernateUtil;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -19,12 +20,13 @@ public class ControladorProveedor {
     public ControladorProveedor() {
     }
 
-    public  void addProveedor(Proveedor proveedor){
+    public void addProveedor(Proveedor proveedor) {
         tx = session.beginTransaction();
         session.save(proveedor);
         tx.commit();
         session.close();
     }
+
     public void editProveedor(Proveedor proveedor, int Idproveedor) {
 
         Proveedor p;
@@ -42,6 +44,7 @@ public class ControladorProveedor {
 
 
     }
+
     public void deleteProveedor(Proveedor proveedor, int Idproveedor) {
 
         Proveedor p;
@@ -71,12 +74,14 @@ public class ControladorProveedor {
         //Control del codigo no duplicar valores
 
         List<Proveedor> listado = new ArrayList<>();
-        listado=selectAll();
-        for (Proveedor e: listado ) {
-            if(e.getCodproveedor().equals(p.getCodproveedor())){
-                errores.put("Codigo", "Codigo duplicado");
-            }
+        listado = selectAll();
+        if (!(p.getIdproveedor() >= 0)) {
+            for (Proveedor e : listado) {
+                if (e.getCodproveedor().equals(p.getCodproveedor())) {
+                    errores.put("Codigo", "Codigo duplicado");
+                }
 
+            }
         }
 
         //Datos de tipo String
@@ -88,14 +93,14 @@ public class ControladorProveedor {
             }
         }
 
-        if (p.getApellidos().length() > 30 || p.getApellidos().equals("")|| p.getApellidos() == null) {
+        if (p.getApellidos().length() > 30 || p.getApellidos().equals("") || p.getApellidos() == null) {
             if (p.getApellidos().length() > 30) {
                 errores.put("Apellidos", "Los apellidos excede en longitud. MAX 20.");
             } else {
                 errores.put("Apellidos", "Los apellidos no puede estar vacio.");
             }
         }
-        if (p.getDireccion().length() > 40 || p.getDireccion().equals("")|| p.getDireccion() == null) {
+        if (p.getDireccion().length() > 40 || p.getDireccion().equals("") || p.getDireccion() == null) {
             if (p.getNombre().length() > 40) {
                 errores.put("Direccion", "La direccion excede en longitud. MAX 20.");
             } else {
@@ -140,5 +145,44 @@ public class ControladorProveedor {
         return enviarListaProveedores;
     }
 
+    public Proveedor selectProveedor(int id) {
+
+        Proveedor p = new Proveedor();
+
+        try {
+            p = (Proveedor) session.load(Proveedor.class, id);
+            proveedor.setCodproveedor(proveedor.getCodproveedor());
+            proveedor.setNombre(proveedor.getNombre());
+            proveedor.setApellidos(proveedor.getApellidos());
+            proveedor.setDireccion(proveedor.getDireccion());
+
+        } catch (ObjectNotFoundException o) {
+            JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+        return p;
+    }
+
+    public List selectByCodigo(String recibo, String consultaDe, String tabla) {
+
+        // Ejemplo consulta : select * from Proveedor where CODProveedor like '%2a%';
+
+        List<Proveedor> listaEntontrados;
+
+
+        //He tenido que construir la sentencia de esta forma. No me funcionaba :cod + q.setParameter
+        String consulta = "from " + tabla + " where " + consultaDe + " like '%" + recibo + "%'";
+
+        // String consulta = "from Proveedor  where codProveedor like :cod";
+        Query q = session.createQuery(consulta);
+
+        //    q.setParameter("cod", "'%recibo%'");
+        System.out.println(q.getQueryString());
+
+        listaEntontrados = q.list();
+
+        return listaEntontrados;
+    }
 
 }
