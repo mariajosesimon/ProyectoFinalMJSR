@@ -3,6 +3,7 @@ package com.company.Vistas;
 import com.company.Controladores.ControladorPieza;
 import com.company.Pieza;
 import com.company.Proveedor;
+import com.company.Proyecto;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,7 @@ public class Buscar {
         bBuscar.addActionListener(e -> {
 
             txtDatos.setText("");
-            listadoPiezas = controladorPieza.selectByCodigo(txtBuscar.getText(), consulta, tabla);
+            listadoPiezas = controladorPieza.selectByCodigo(txtBuscar.getText().toUpperCase(), consulta, tabla);
             if (listadoPiezas.size()==0) {
                 JOptionPane.showMessageDialog(null, "No se han encontrado datos", "Resultado", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -59,6 +60,13 @@ public class Buscar {
                                 "Nombre: " + p.getNombre() + "\n" +
                                 "Apellidos: " + p.getApellidos() + "\n" +
                                 "Direccion: " + p.getDireccion());
+            }else if(tabla.equals("Proyecto")){
+                Proyecto py = (Proyecto) cbEncontrados.getSelectedItem();
+                txtDatos.setText(
+                        "Codigo proyecto: " + py.getCodproyecto() + "\n" +
+                                "Nombre: " + py.getNombre() + "\n" +
+                                "Ciudad: " + py.getCiudad() + "\n" +
+                                "Supervisor: " + py.getSupervisor());
             }
 
         });

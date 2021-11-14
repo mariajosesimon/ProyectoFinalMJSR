@@ -84,4 +84,9 @@ public class Proyecto {
     public void setGestionsByIdproyecto(Collection<Gestion> gestionsByIdproyecto) {
         this.gestionsByIdproyecto = gestionsByIdproyecto;
     }
+    @Override
+    public String toString() {
+        return codproyecto + " --> " + nombre + " - " + ciudad + " - " + supervisor;
+
+    }
 }

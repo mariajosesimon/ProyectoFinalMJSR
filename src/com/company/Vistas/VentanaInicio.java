@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.MarshalledObject;
 
 
 public class VentanaInicio {
@@ -18,6 +19,7 @@ public class VentanaInicio {
     private JPanel JPVacio;
     private ControladorPieza cpieza;
     private ControladorProveedor cproveedor;
+    private ControladorProyecto cproyecto;
 
 
     public VentanaInicio(JFrame frame) {
@@ -26,8 +28,9 @@ public class VentanaInicio {
 
         /********************Menu Base de datos*****************/
         JMenu MenuBaseDatos = new JMenu("Base de Datos");
+        JMenuItem mostrarBD = new JMenuItem("Base de datos");
+        MenuBaseDatos.add(mostrarBD);
         menuBar.add(MenuBaseDatos);
-
 
         /********************Menu Pieza*****************/
         JMenu MenuPiezas = new JMenu("Pieza");
@@ -80,13 +83,13 @@ public class VentanaInicio {
         JMenu MenuProyectos = new JMenu("Proyectos");
         JMenuItem itemAltaProyecto = new JMenuItem("Alta");
         JMenuItem itemBajaProyecto = new JMenuItem("Baja");
-        JMenuItem itemListadoProyecto = new JMenuItem("Listadp");
+        JMenuItem itemListadoProyecto = new JMenuItem("Listado");
         JMenuItem itemModificacionProyecto = new JMenuItem("Modificacion");
-        JMenu itemConsultaProyectos = new JMenu("Consulta de Proyectoes");
+        JMenu itemConsultaProyectos = new JMenu("Consulta de Proyectos");
 
         JMenuItem itemCodigoProy = new JMenuItem("Por Codigo");
         JMenuItem itemNombreProy = new JMenuItem("Por Nombre");
-        JMenuItem itemDireccionProy = new JMenuItem("Por Dirección");
+        JMenuItem itemCiudadProy = new JMenuItem("Por Ciudad");
 
         MenuProyectos.add(itemAltaProyecto);
         MenuProyectos.add(itemModificacionProyecto);
@@ -95,7 +98,7 @@ public class VentanaInicio {
 
         itemConsultaProyectos.add(itemCodigoProy);
         itemConsultaProyectos.add(itemNombreProy);
-        itemConsultaProyectos.add(itemDireccionProy);
+        itemConsultaProyectos.add(itemCiudadProy);
         MenuProyectos.add(itemConsultaProyectos);
         menuBar.add(MenuProyectos);
 
@@ -103,13 +106,14 @@ public class VentanaInicio {
 
         JMenu MenuGestionGlobal = new JMenu("Gestión Global");
         JMenu MenuAyuda = new JMenu("Ayuda");
+        JMenuItem mostrarAyuda = new JMenuItem("Ayuda");
+        MenuAyuda.add(mostrarAyuda);
 
 
         JMenuItem itemPPP = new JMenuItem("Pieza, Proveedores y Proyectos");
         JMenuItem itemSuministrosProveedor = new JMenuItem("Suministros por Proveedor");
         JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Pieza");
         JMenuItem itemEstadisticas = new JMenuItem("Estadísticas");
-
 
         MenuGestionGlobal.add(itemPPP);
         MenuGestionGlobal.add(itemSuministrosProveedor);
@@ -124,8 +128,18 @@ public class VentanaInicio {
 
         /***************************** ACCIONES EN LOS MENUS ****************************/
 
+
+
         /**Cada vez que pulsemos en un item nos abrirá el panel inferior nuevo con los campos correspondientes a la tabla*/
 
+        mostrarAyuda.addActionListener(e->{
+            Ayuda ayuda =new Ayuda();
+            mostrarPanel(ayuda.getJPAyuda());
+        });
+        mostrarBD.addActionListener(e->{
+            BaseDatos bd = new BaseDatos();
+            mostrarPanel(bd.getJPBaseDatos());
+        });
         /**************************** PROVEEDORES ****************************************/
 
 
@@ -235,6 +249,52 @@ public class VentanaInicio {
             mostrarPanel(buscarPiezaXNombre.getJPBuscar());
         });
 
+
+        /*********************************** PROYECTOS *********************************/
+        itemAltaProyecto.addActionListener(e -> {
+            VistaProyectos alta = new VistaProyectos();
+            alta.getSpListado().setVisible(false);
+            alta.getLbListaProyectos().setVisible(false);
+            alta.getLbId().setVisible(false);
+            alta.getLbIDProyecto().setVisible(false);
+            cproyecto = new ControladorProyecto();
+            mostrarPanel(alta.getJPProyecto());
+
+        });
+        itemModificacionProyecto.addActionListener(e -> {
+            VistaProyectos modificacion = new VistaProyectos();
+            modificacion.renombrar("MODIFICAR");
+            cproyecto = new ControladorProyecto();
+            modificacion.mostrarProyectos(cproyecto.selectAll());
+            mostrarPanel(modificacion.getJPProyecto());
+        });
+        itemBajaProyecto.addActionListener(e -> {
+
+        });
+        itemListadoProyecto.addActionListener(e -> {
+            ListarProyectos listado = new ListarProyectos();
+            cproyecto = new ControladorProyecto();
+            listado.setListaProyectos(cproyecto.selectAll());
+            mostrarPanel(listado.getJPProyectoListado());
+        });
+        itemCodigoProy.addActionListener(e -> {
+            Buscar buscarProyectoXCodigo = new Buscar();
+            buscarProyectoXCodigo.consulta = "codproyecto";
+            buscarProyectoXCodigo.tabla="Proyecto";
+            mostrarPanel(buscarProyectoXCodigo.getJPBuscar());
+        });
+        itemNombreProy.addActionListener(e -> {
+            Buscar buscarProyectoXNombre = new Buscar();
+            buscarProyectoXNombre.consulta = "Nombre";
+            buscarProyectoXNombre.tabla="Proyecto";
+            mostrarPanel(buscarProyectoXNombre.getJPBuscar());
+        });
+        itemCiudadProy.addActionListener(e -> {
+            Buscar buscarProyectoXCiudad = new Buscar();
+            buscarProyectoXCiudad.consulta = "Ciudad";
+            buscarProyectoXCiudad.tabla="Proyecto";
+            mostrarPanel(buscarProyectoXCiudad.getJPBuscar());
+        });
 
 
         /** Menu Gestion Global  */
