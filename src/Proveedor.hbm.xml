@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.company.Proveedor" table="proveedor" schema="tallermjsr">
+        <id name="idproveedor">
+            <column name="IDPROVEEDOR" sql-type="int"/>
+        </id>
+        <property name="codproveedor">
+            <column name="CODPROVEEDOR" sql-type="varchar(6)" length="6"/>
+        </property>
+        <property name="nombre">
+            <column name="NOMBRE" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="apellidos">
+            <column name="APELLIDOS" sql-type="varchar(30)" length="30"/>
+        </property>
+        <property name="direccion">
+            <column name="DIRECCION" sql-type="varchar(40)" length="40" not-null="true"/>
+        </property>
+        <set name="gestionsByIdproveedor" inverse="true">
+            <key>
+                <column name="idproveedor"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.company.Gestion"/>
+        </set>
+    </class>
+</hibernate-mapping>
