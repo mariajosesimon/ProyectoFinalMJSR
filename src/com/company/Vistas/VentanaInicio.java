@@ -199,7 +199,7 @@ public class VentanaInicio {
         });
         itemCodigoPi.addActionListener(e -> {
 
-            BuscarPiezaXCodigo buscarPiezaXCodigo = new BuscarPiezaXCodigo();
+            BuscarPieza buscarPiezaXCodigo = new BuscarPieza();
             mostrarPanel(buscarPiezaXCodigo.getJPBuscarPieza());
 
         });

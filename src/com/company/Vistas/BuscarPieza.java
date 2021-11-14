@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BuscarPiezaXCodigo {
+public class BuscarPieza {
     private JPanel JPGeneral,JPBuscarPieza;
     private JLabel lbTitulo;
     private JTextField txtBuscar;
@@ -16,7 +16,7 @@ public class BuscarPiezaXCodigo {
     ControladorPieza controladorPieza = new ControladorPieza();
 
 
-    public BuscarPiezaXCodigo() {
+    public BuscarPieza() {
 
         bBuscar.addActionListener(e -> {
 
