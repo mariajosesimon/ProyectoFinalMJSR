@@ -91,6 +91,7 @@ public class ListarProveedores {
         bAnterior.setEnabled(false);
         Proveedor p = listaProveedores.get(0);
         lbIDProveedor.setText(String.valueOf(p.getIdproveedor()));
+        txtCodigo.setText(p.getCodproveedor());
         txtNombre.setText(p.getNombre());
         txtApellidos.setText(p.getApellidos());
         txtDireccion.setText(p.getDireccion());

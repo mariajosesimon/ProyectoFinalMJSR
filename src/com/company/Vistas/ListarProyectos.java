@@ -90,6 +90,7 @@ public class ListarProyectos {
         bAnterior.setEnabled(false);
         Proyecto p = listaProyectos.get(0);
         lbIDProyecto.setText(String.valueOf(p.getIdproyecto()));
+        txtCodigo.setText(p.getCodproyecto());
         txtNombre.setText(p.getNombre());
         txtCiudad.setText(p.getCiudad());
         txtSupervisor.setText(p.getSupervisor());

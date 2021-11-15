@@ -90,6 +90,7 @@ public class ListarPiezas {
         bAnterior.setEnabled(false);
         Pieza p = listaPiezas.get(0);
         lbIDPieza.setText(String.valueOf(p.getIdpieza()));
+        txtCodigo.setText(p.getCodpieza());
         txtNombre.setText(p.getNombre());
         txtPrecio.setText(String.valueOf(p.getPrecio()));
         txtDescripcion.setText(p.getDescripcion());
