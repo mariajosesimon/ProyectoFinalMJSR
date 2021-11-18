@@ -1,14 +1,18 @@
 package com.company.Controladores;
 
+
+import com.company.Pieza;
+import com.company.Proveedor;
+import com.company.Proyecto;
 import com.company.utils.HibernateUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
 import javax.swing.*;
 import java.util.*;
-import com.company.Proyecto;
 import java.util.List;
 
 public class ControladorProyecto {
@@ -44,7 +48,13 @@ public class ControladorProyecto {
         session.close();
     }
 
-    public void deleteProyecto() {
+    public void deleteProyecto(Proyecto proyecto, int Idproyecto) {
+        Proyecto p;
+        tx = session.beginTransaction();
+        p = (Proyecto) session.load(Proyecto.class, Idproyecto);
+        session.delete(proyecto);
+        tx.commit();
+        session.close();
     }
 
 
@@ -68,12 +78,12 @@ public class ControladorProyecto {
 
         List<Proyecto> listado = new ArrayList<>();
         listado = selectAll();
-        if (!(p.getIdproyecto() >= 0)) {
-            for (Proyecto e : listado) {
-                if (e.getCodproyecto().equals(p.getCodproyecto())) {
+
+        for (Proyecto e : listado) {
+            if (e.getCodproyecto().equals(p.getCodproyecto())) {
+                if (!(p.getIdproyecto() >= 0 && p.getIdproyecto() < listado.size())) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
-
             }
         }
 
@@ -111,7 +121,8 @@ public class ControladorProyecto {
     }
 
     public List<Proyecto> selectAll() {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         Query q = session.createQuery("from Proyecto");
 
         List<Proyecto> listaProyectoes = q.list();
@@ -123,17 +134,18 @@ public class ControladorProyecto {
             proyecto.setCodproyecto(proyecto.getCodproyecto());
             proyecto.setNombre(proyecto.getNombre());
             proyecto.setCiudad(proyecto.getCiudad());
-            proyecto.setSupervisor(proyecto.getSupervisor());
+            //  proyecto.setSupervisor(proyecto.getSupervisor());
             enviarListaProyectoes.add(proyecto);
 
         }
 
-
+        session2.close();
         return enviarListaProyectoes;
     }
 
     public Proyecto selectProyecto(int id) {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         Proyecto p = new Proyecto();
 
         try {
@@ -141,20 +153,23 @@ public class ControladorProyecto {
             proyecto.setCodproyecto(proyecto.getCodproyecto());
             proyecto.setNombre(proyecto.getNombre());
             proyecto.setCiudad(proyecto.getCiudad());
-            proyecto.setSupervisor(proyecto.getSupervisor());
+
+
+
 
         } catch (ObjectNotFoundException o) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-
+        session2.close();
         return p;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
 
         // Ejemplo consulta : select * from Proyecto where CODProyecto like '%2a%';
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         List<Proyecto> listaEntontrados;
 
 
@@ -168,10 +183,9 @@ public class ControladorProyecto {
         System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-
+        session2.close();
         return listaEntontrados;
     }
-
 
 
 }

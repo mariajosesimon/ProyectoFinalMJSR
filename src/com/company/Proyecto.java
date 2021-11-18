@@ -1,7 +1,6 @@
 package com.company;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -10,8 +9,8 @@ public class Proyecto {
     private String codproyecto;
     private String nombre;
     private String ciudad;
-    private String supervisor;
-    private Collection<Gestion> gestionsByIdproyecto;
+    private Integer supervisor;
+    private Proveedor proveedorBySupervisor;
 
     @Id
     @Column(name = "idproyecto", nullable = false)
@@ -54,12 +53,12 @@ public class Proyecto {
     }
 
     @Basic
-    @Column(name = "SUPERVISOR", nullable = true, length = 20)
-    public String getSupervisor() {
+    @Column(name = "SUPERVISOR", nullable = true)
+    public Integer getSupervisor() {
         return supervisor;
     }
 
-    public void setSupervisor(String supervisor) {
+    public void setSupervisor(Integer supervisor) {
         this.supervisor = supervisor;
     }
 
@@ -76,17 +75,19 @@ public class Proyecto {
         return Objects.hash(idproyecto, codproyecto, nombre, ciudad, supervisor);
     }
 
-    @OneToMany(mappedBy = "proyectoByIdproyecto")
-    public Collection<Gestion> getGestionsByIdproyecto() {
-        return gestionsByIdproyecto;
+    @ManyToOne
+    @JoinColumn(name = "SUPERVISOR", referencedColumnName = "IDPROVEEDOR")
+    public Proveedor getProveedorBySupervisor() {
+        return proveedorBySupervisor;
     }
 
-    public void setGestionsByIdproyecto(Collection<Gestion> gestionsByIdproyecto) {
-        this.gestionsByIdproyecto = gestionsByIdproyecto;
+    public void setProveedorBySupervisor(Proveedor proveedorBySupervisor) {
+        this.proveedorBySupervisor = proveedorBySupervisor;
     }
     @Override
     public String toString() {
-        return codproyecto + " --> " + nombre + " - " + ciudad + " - " + supervisor;
+        return codproyecto + " --> " + nombre + " - " + ciudad ;
 
     }
+
 }

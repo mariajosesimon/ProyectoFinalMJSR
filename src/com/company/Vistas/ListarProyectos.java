@@ -13,63 +13,62 @@ public class ListarProyectos {
     private JButton bAnterior, bUltimo, bVolver, bSiguiente, bPrimero;
 
     List<Proyecto> listaProyectos = new ArrayList<>();
-    int siguiente;
+    int siguiente = 0;
 
     public ListarProyectos() {
 
         bPrimero.addActionListener(e -> {
-
+            siguiente = 0;
             Proyecto p = listaProyectos.get(0);
             lbIDProyecto.setText(String.valueOf(p.getIdproyecto()));
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            txtSupervisor.setText(p.getSupervisor());
-            activarbotones();
+        //    txtSupervisor.setText();
+            activarbotones(0);
 
         });
         bAnterior.addActionListener(e -> {
 
+            if (siguiente > 0) {
+                siguiente--;
+            }
 
-            /*Tengo que restar 2 porque en los listados emProyecton en 0.
-             *Ej: el listado el elemento get(3) es el que tiene idProyecto = 4,
-             * para que mueste el anterior, es decir el id Proyecto 3, tengo que restar 2
-             *  tengo que buscar el get(2)
-             * */
 
-            siguiente = Integer.parseInt(lbIDProyecto.getText()) - 2;
             Proyecto p = listaProyectos.get(siguiente);
             lbIDProyecto.setText(String.valueOf(p.getIdproyecto()));
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            txtSupervisor.setText(p.getSupervisor());
-            activarbotones();
+            // txtSupervisor.setText(p.getSupervisor());
+            activarbotones(siguiente);
 
 
         });
         bSiguiente.addActionListener(e -> {
-            siguiente = Integer.parseInt(lbIDProyecto.getText());
+            if (siguiente < listaProyectos.size() - 1) {
+                siguiente++;
+            }
 
             Proyecto p = listaProyectos.get(siguiente);
             lbIDProyecto.setText(String.valueOf(p.getIdproyecto()));
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            txtSupervisor.setText(p.getSupervisor());
+            //  txtSupervisor.setText(p.getSupervisor());
 
-            activarbotones();
+            activarbotones(siguiente);
 
         });
         bUltimo.addActionListener(e -> {
-
-            Proyecto p = listaProyectos.get(listaProyectos.size() - 1);
+            siguiente = listaProyectos.size() - 1;
+            Proyecto p = listaProyectos.get(siguiente);
             lbIDProyecto.setText(String.valueOf(p.getIdproyecto()));
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            txtSupervisor.setText(p.getSupervisor());
-            activarbotones();
+            //  txtSupervisor.setText(p.getSupervisor());
+            activarbotones(siguiente);
 
         });
         bVolver.addActionListener(e -> autoDestroy());
@@ -93,35 +92,28 @@ public class ListarProyectos {
         txtCodigo.setText(p.getCodproyecto());
         txtNombre.setText(p.getNombre());
         txtCiudad.setText(p.getCiudad());
-        txtSupervisor.setText(p.getSupervisor());
+        //  txtSupervisor.setText(p.getSupervisor());
 
         return JPProyectoListado;
     }
 
-    public void activarbotones() {
+    public void activarbotones(int id) {
 
-        // primer registro
-        if (Integer.parseInt(lbIDProyecto.getText()) == 1) {
+        if (id == 0) { // primer registro
             bPrimero.setEnabled(false);
             bAnterior.setEnabled(false);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
-        }
-        //ultimo registro
-        if (Integer.parseInt(lbIDProyecto.getText()) == listaProyectos.size()) {
-            bPrimero.setEnabled(true);
-            bAnterior.setEnabled(true);
-            bSiguiente.setEnabled(false);
-            bUltimo.setEnabled(false);
-        }
-
-        //registros del medio
-
-        if (Integer.parseInt(lbIDProyecto.getText()) > 1 && Integer.parseInt(lbIDProyecto.getText()) < listaProyectos.size()) {
+        } else if (id > 0 && id < listaProyectos.size() - 1) {//  registros del medio
             bPrimero.setEnabled(true);
             bAnterior.setEnabled(true);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
+        } else if (id == listaProyectos.size() - 1) {// ultimo registro
+            bPrimero.setEnabled(true);
+            bAnterior.setEnabled(true);
+            bSiguiente.setEnabled(false);
+            bUltimo.setEnabled(false);
         }
 
 

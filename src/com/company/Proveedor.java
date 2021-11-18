@@ -11,7 +11,7 @@ public class Proveedor {
     private String nombre;
     private String apellidos;
     private String direccion;
-    private Collection<Gestion> gestionsByIdproveedor;
+    private Collection<Proyecto> proyectosByIdproveedor;
 
     @Id
     @Column(name = "IDPROVEEDOR", nullable = false)
@@ -76,15 +76,14 @@ public class Proveedor {
         return Objects.hash(idproveedor, codproveedor, nombre, apellidos, direccion);
     }
 
-    @OneToMany(mappedBy = "proveedorByIdproveedor")
-    public Collection<Gestion> getGestionsByIdproveedor() {
-        return gestionsByIdproveedor;
+    @OneToMany(mappedBy = "proveedorBySupervisor")
+    public Collection<Proyecto> getProyectosByIdproveedor() {
+        return proyectosByIdproveedor;
     }
 
-    public void setGestionsByIdproveedor(Collection<Gestion> gestionsByIdproveedor) {
-        this.gestionsByIdproveedor = gestionsByIdproveedor;
+    public void setProyectosByIdproveedor(Collection<Proyecto> proyectosByIdproveedor) {
+        this.proyectosByIdproveedor = proyectosByIdproveedor;
     }
-
     @Override
     public String toString() {
         return codproveedor + " --> " + nombre + " - " + apellidos + " - " + direccion;

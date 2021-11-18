@@ -18,13 +18,10 @@
             <column name="CIUDAD" sql-type="varchar(40)" length="40"/>
         </property>
         <property name="supervisor">
-            <column name="SUPERVISOR" sql-type="varchar(20)" length="20" not-null="true"/>
+            <column name="SUPERVISOR" sql-type="int" not-null="true"/>
         </property>
-        <set name="gestionsByIdproyecto" inverse="true">
-            <key>
-                <column name="idproyecto"/>
-            </key>
-            <one-to-many not-found="ignore" class="com.company.Gestion"/>
-        </set>
+        <many-to-one name="proveedorBySupervisor" class="com.company.Proveedor" insert="false" update="false">
+            <column name="SUPERVISOR" not-null="true"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

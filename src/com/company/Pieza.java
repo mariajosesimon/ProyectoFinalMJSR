@@ -1,7 +1,9 @@
 package com.company;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
@@ -11,7 +13,6 @@ public class Pieza {
     private String nombre;
     private double precio;
     private String descripcion;
-    private Collection<Gestion> gestionsByIdpieza;
 
     @Id
     @Column(name = "IDPIEZA", nullable = false)
@@ -75,16 +76,6 @@ public class Pieza {
     public int hashCode() {
         return Objects.hash(idpieza, codpieza, nombre, precio, descripcion);
     }
-
-    @OneToMany(mappedBy = "piezaByIdpieza")
-    public Collection<Gestion> getGestionsByIdpieza() {
-        return gestionsByIdpieza;
-    }
-
-    public void setGestionsByIdpieza(Collection<Gestion> gestionsByIdpieza) {
-        this.gestionsByIdpieza = gestionsByIdpieza;
-    }
-
     @Override
     public String toString() {
         return codpieza + " --> " + nombre + " - " + precio + "€ - " + descripcion;

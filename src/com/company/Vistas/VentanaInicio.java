@@ -1,6 +1,7 @@
 package com.company.Vistas;
 
 import com.company.Controladores.*;
+import com.company.Proveedor;
 import com.company.utils.HibernateUtil;
 
 import org.hibernate.*;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.MarshalledObject;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VentanaInicio {
@@ -17,9 +20,10 @@ public class VentanaInicio {
 
     private JPanel JPGeneral;
     private JPanel JPVacio;
-    private ControladorPieza cpieza;
-    private ControladorProveedor cproveedor;
-    private ControladorProyecto cproyecto;
+    private ControladorPieza cpieza = new ControladorPieza();
+    private ControladorProveedor cproveedor = new ControladorProveedor();
+    private ControladorProyecto cproyecto = new ControladorProyecto();
+    private List<Proveedor> listadoProveedores = new ArrayList<>();
 
 
     public VentanaInicio(JFrame frame) {
@@ -37,7 +41,7 @@ public class VentanaInicio {
 
         JMenuItem itemAltaPieza = new JMenuItem("Alta");
         JMenuItem itemModificacionPieza = new JMenuItem("Modificacion");
-        JMenuItem itemBajaPieza = new JMenuItem("Baja");
+        JMenuItem itemBajaPieza = new JMenuItem("Eliminar");
         JMenuItem itemListadoPieza = new JMenuItem("Listado");
         JMenu itemConsultaPiezas = new JMenu("Consulta de Pieza");
 
@@ -58,7 +62,7 @@ public class VentanaInicio {
         /***********************Menu Proveedor*********************/
         JMenu MenuProveedores = new JMenu("Proveedores");
         JMenuItem itemAltaProveedor = new JMenuItem("Alta");
-        JMenuItem itemBajaProveedor = new JMenuItem("Baja");
+        JMenuItem itemBajaProveedor = new JMenuItem("Eliminar");
         JMenuItem itemListadoProveedor = new JMenuItem("Listado");
         JMenuItem itemModificacionProveedor = new JMenuItem("Modificacion");
         JMenu itemConsultaProveedores = new JMenu("Consulta de Proveedores");
@@ -82,9 +86,9 @@ public class VentanaInicio {
 
         JMenu MenuProyectos = new JMenu("Proyectos");
         JMenuItem itemAltaProyecto = new JMenuItem("Alta");
-        JMenuItem itemBajaProyecto = new JMenuItem("Baja");
-        JMenuItem itemListadoProyecto = new JMenuItem("Listado");
         JMenuItem itemModificacionProyecto = new JMenuItem("Modificacion");
+        JMenuItem itemBajaProyecto = new JMenuItem("Eliminar");
+        JMenuItem itemListadoProyecto = new JMenuItem("Listado");
         JMenu itemConsultaProyectos = new JMenu("Consulta de Proyectos");
 
         JMenuItem itemCodigoProy = new JMenuItem("Por Codigo");
@@ -129,14 +133,13 @@ public class VentanaInicio {
         /***************************** ACCIONES EN LOS MENUS ****************************/
 
 
-
         /**Cada vez que pulsemos en un item nos abrirá el panel inferior nuevo con los campos correspondientes a la tabla*/
 
-        mostrarAyuda.addActionListener(e->{
-            Ayuda ayuda =new Ayuda();
+        mostrarAyuda.addActionListener(e -> {
+            Ayuda ayuda = new Ayuda();
             mostrarPanel(ayuda.getJPAyuda());
         });
-        mostrarBD.addActionListener(e->{
+        mostrarBD.addActionListener(e -> {
             BaseDatos bd = new BaseDatos();
             mostrarPanel(bd.getJPBaseDatos());
         });
@@ -149,150 +152,189 @@ public class VentanaInicio {
             alta.getLbListaProveedores().setVisible(false);
             alta.getLbId().setVisible(false);
             alta.getLbIDProveedor().setVisible(false);
-            cproveedor = new ControladorProveedor();
+            //   cproveedor = new ControladorProveedor();
             mostrarPanel(alta.getJPProveedor());
 
         });
-        itemModificacionProveedor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VistaProveedores modificacion = new VistaProveedores();
-                modificacion.renombrar("MODIFICAR");
-                cproveedor = new ControladorProveedor();
-                modificacion.mostrarProveedores(cproveedor.selectAll());
+        itemModificacionProveedor.addActionListener(e -> {
+            VistaProveedores modificacion = new VistaProveedores();
+            modificacion.renombrar("MODIFICAR");
+            //  cproveedor = new ControladorProveedor();
+            modificacion.mostrarProveedores(cproveedor.selectAll());
+            if (cproveedor.selectAll().size() > 0) {
                 mostrarPanel(modificacion.getJPProveedor());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         itemBajaProveedor.addActionListener(e -> {
-
+            VistaProveedores eliminar = new VistaProveedores();
+            eliminar.renombrar("ELIMINAR");
+            eliminar.mostrarProveedores(cproveedor.selectAll());
+            if (cproveedor.selectAll().size() > 0) {
+                mostrarPanel(eliminar.getJPProveedor());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+            }
         });
         itemListadoProveedor.addActionListener(e -> {
             ListarProveedores listado = new ListarProveedores();
-            cproveedor = new ControladorProveedor();
+            //   cproveedor = new ControladorProveedor();
             listado.setListaProveedores(cproveedor.selectAll());
-            mostrarPanel(listado.getJPProveedorListado());
+            if (cproveedor.selectAll().size() > 0) {
+                mostrarPanel(listado.getJPProveedorListado());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
         });
         itemCodigoProv.addActionListener(e -> {
             Buscar buscarProveedorXCodigo = new Buscar();
             buscarProveedorXCodigo.consulta = "codproveedor";
-            buscarProveedorXCodigo.tabla="Proveedor";
+            buscarProveedorXCodigo.tabla = "Proveedor";
             mostrarPanel(buscarProveedorXCodigo.getJPBuscar());
         });
         itemNombreProv.addActionListener(e -> {
             Buscar buscarProveedorXNombre = new Buscar();
             buscarProveedorXNombre.consulta = "nombre";
-            buscarProveedorXNombre.tabla="Proveedor";
+            buscarProveedorXNombre.tabla = "Proveedor";
             mostrarPanel(buscarProveedorXNombre.getJPBuscar());
         });
         itemDireccionProv.addActionListener(e -> {
             Buscar buscarProveedorXDireccion = new Buscar();
             buscarProveedorXDireccion.consulta = "direccion";
-            buscarProveedorXDireccion.tabla="Proveedor";
+            buscarProveedorXDireccion.tabla = "Proveedor";
             mostrarPanel(buscarProveedorXDireccion.getJPBuscar());
         });
 
 
         /**************************** PIEZAS ****************************************/
 
-        itemAltaPieza.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VistaPiezas alta = new VistaPiezas();
-                alta.getSpListado().setVisible(false);
-                alta.getLbListaPiezas().setVisible(false);
-                alta.getLbId().setVisible(false);
-                alta.getLbIDPieza().setVisible(false);
-                cpieza = new ControladorPieza();
-                mostrarPanel(alta.getJPPieza());
-            }
+        itemAltaPieza.addActionListener(e -> {
+            VistaPiezas alta = new VistaPiezas();
+            alta.getSpListado().setVisible(false);
+            alta.getLbListaPiezas().setVisible(false);
+            alta.getLbId().setVisible(false);
+            alta.getLbIDPieza().setVisible(false);
+            //cpieza = new ControladorPieza();
+            mostrarPanel(alta.getJPPieza());
         });
-        itemBajaPieza.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        itemModificacionPieza.addActionListener(e -> {
+            /*Necesito recuperar todas las piezas para mostrar en el listado
+             * */
+            VistaPiezas modificacion = new VistaPiezas();
+            modificacion.renombrar("MODIFICAR");
+            modificacion.getSpListado().setVisible(true);
+            modificacion.getLbListaPiezas().setVisible(true);
+            //cpieza = new ControladorPieza();
+            modificacion.mostrarPiezas(cpieza.selectAll());
+            if (cpieza.selectAll().size() > 0) {
+                mostrarPanel(modificacion.getJPPieza());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
 
             }
+
+
         });
-        itemModificacionPieza.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                /*Necesito recuperar todas las piezas para mostrar en el listado
-                 * */
-                VistaPiezas modificacion = new VistaPiezas();
-                modificacion.renombrar("MODIFICAR");
-                modificacion.getSpListado().setVisible(true);
-                modificacion.getLbListaPiezas().setVisible(true);
-                cpieza = new ControladorPieza();
-                modificacion.mostrarPiezas(cpieza.selectAll());
-                mostrarPanel(modificacion.getJPPieza());
+        itemBajaPieza.addActionListener(e -> {
+            VistaPiezas eliminar = new VistaPiezas();
+            eliminar.renombrar("ELIMINAR");
+            eliminar.mostrarPiezas(cpieza.selectAll());
+            if (cpieza.selectAll().size() > 0) {
+                mostrarPanel(eliminar.getJPPieza());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         itemListadoPieza.addActionListener(e -> {
             /*Necesito recuperar todas las piezas para mostrar en el listado
              * */
             ListarPiezas listado = new ListarPiezas();
-            cpieza = new ControladorPieza();
+            //cpieza = new ControladorPieza();
             listado.setListaPiezas(cpieza.selectAll());
-            mostrarPanel(listado.getJPPiezaListado());
+            if (cpieza.selectAll().size() > 0) {
+                mostrarPanel(listado.getJPPiezaListado());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+
         });
         itemCodigoPi.addActionListener(e -> {
 
             Buscar buscarPiezaXCodigo = new Buscar();
-            buscarPiezaXCodigo.tabla="Pieza";
+            buscarPiezaXCodigo.tabla = "Pieza";
             buscarPiezaXCodigo.consulta = "codpieza";
             mostrarPanel(buscarPiezaXCodigo.getJPBuscar());
 
         });
         itemNombrePi.addActionListener(e -> {
             Buscar buscarPiezaXNombre = new Buscar();
-            buscarPiezaXNombre.tabla="Pieza";
-            buscarPiezaXNombre.consulta="nombre";
+            buscarPiezaXNombre.tabla = "Pieza";
+            buscarPiezaXNombre.consulta = "nombre";
             mostrarPanel(buscarPiezaXNombre.getJPBuscar());
         });
 
 
         /*********************************** PROYECTOS *********************************/
         itemAltaProyecto.addActionListener(e -> {
-            VistaProyectos alta = new VistaProyectos();
+            listadoProveedores = cproveedor.selectAll();
+            VistaProyectos alta = new VistaProyectos(listadoProveedores);
             alta.getSpListado().setVisible(false);
             alta.getLbListaProyectos().setVisible(false);
             alta.getLbId().setVisible(false);
             alta.getLbIDProyecto().setVisible(false);
-            cproyecto = new ControladorProyecto();
             mostrarPanel(alta.getJPProyecto());
 
         });
         itemModificacionProyecto.addActionListener(e -> {
-            VistaProyectos modificacion = new VistaProyectos();
+            listadoProveedores = cproveedor.selectAll();
+            VistaProyectos modificacion = new VistaProyectos(listadoProveedores);
             modificacion.renombrar("MODIFICAR");
-            cproyecto = new ControladorProyecto();
             modificacion.mostrarProyectos(cproyecto.selectAll());
-            mostrarPanel(modificacion.getJPProyecto());
+            if (cproyecto.selectAll().size() > 0) {
+                mostrarPanel(modificacion.getJPProyecto());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
         });
         itemBajaProyecto.addActionListener(e -> {
+
 
         });
         itemListadoProyecto.addActionListener(e -> {
             ListarProyectos listado = new ListarProyectos();
-            cproyecto = new ControladorProyecto();
             listado.setListaProyectos(cproyecto.selectAll());
-            mostrarPanel(listado.getJPProyectoListado());
+
+            if (cproyecto.selectAll().size() > 0) {
+                mostrarPanel(listado.getJPProyectoListado());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
         });
         itemCodigoProy.addActionListener(e -> {
             Buscar buscarProyectoXCodigo = new Buscar();
             buscarProyectoXCodigo.consulta = "codproyecto";
-            buscarProyectoXCodigo.tabla="Proyecto";
+            buscarProyectoXCodigo.tabla = "Proyecto";
             mostrarPanel(buscarProyectoXCodigo.getJPBuscar());
         });
         itemNombreProy.addActionListener(e -> {
             Buscar buscarProyectoXNombre = new Buscar();
             buscarProyectoXNombre.consulta = "Nombre";
-            buscarProyectoXNombre.tabla="Proyecto";
+            buscarProyectoXNombre.tabla = "Proyecto";
             mostrarPanel(buscarProyectoXNombre.getJPBuscar());
         });
         itemCiudadProy.addActionListener(e -> {
             Buscar buscarProyectoXCiudad = new Buscar();
             buscarProyectoXCiudad.consulta = "Ciudad";
-            buscarProyectoXCiudad.tabla="Proyecto";
+            buscarProyectoXCiudad.tabla = "Proyecto";
             mostrarPanel(buscarProyectoXCiudad.getJPBuscar());
         });
 

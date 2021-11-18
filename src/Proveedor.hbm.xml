@@ -20,11 +20,11 @@
         <property name="direccion">
             <column name="DIRECCION" sql-type="varchar(40)" length="40" not-null="true"/>
         </property>
-        <set name="gestionsByIdproveedor" inverse="true">
+        <set name="proyectosByIdproveedor" inverse="true">
             <key>
-                <column name="idproveedor"/>
+                <column name="SUPERVISOR" not-null="true"/>
             </key>
-            <one-to-many not-found="ignore" class="com.company.Gestion"/>
+            <one-to-many not-found="ignore" class="com.company.Proyecto"/>
         </set>
     </class>
 </hibernate-mapping>

@@ -2,14 +2,14 @@ package com.company.Vistas;
 
 import com.company.Controladores.ControladorProveedor;
 import com.company.Proveedor;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Locale;
 
 public class VistaProveedores {
     private JPanel JPGeneral, JPProveedor;
-    private JLabel  lbId,  lbListaProveedores,lbIDProveedor, lbTitulo, lbCodigo, lbNombre, lbApellidos, lbDireccion;
+    private JLabel lbId, lbListaProveedores, lbIDProveedor, lbTitulo, lbCodigo, lbNombre, lbApellidos, lbDireccion;
     private JButton bInsertar, bCancelar;
     private JTextField txtNombre, txtApellidos, txtDireccion, txtCodigo;
     private JList<Proveedor> lstProveedores;
@@ -27,18 +27,27 @@ public class VistaProveedores {
                 autoDestroy();
             }
         });
-        bInsertar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        bInsertar.addActionListener(e -> {
 
-                boolean ok = false;  // comprobamos en los controladores si ha pasado todas las validaciones cada objeto y si es true puede continuar
+            boolean ok = false;  // comprobamos en los controladores si ha pasado todas las validaciones cada objeto y si es true puede continuar
+            Proveedor proveedor = new Proveedor();
+            if ((!lbIDProveedor.getText().equals(""))) {
+                proveedor.setIdproveedor(Integer.parseInt(lbIDProveedor.getText()));
+            }
+            proveedor.setCodproveedor(txtCodigo.getText().toUpperCase());
+            proveedor.setNombre(txtNombre.getText().toUpperCase());
+            proveedor.setApellidos(txtApellidos.getText().toUpperCase());
+            proveedor.setDireccion(txtDireccion.getText().toUpperCase());
 
-                Proveedor proveedor = new Proveedor();
 
-                proveedor.setCodproveedor(txtCodigo.getText().toUpperCase());
-                proveedor.setNombre(txtNombre.getText().toUpperCase());
-                proveedor.setApellidos(txtApellidos.getText().toUpperCase());
-                proveedor.setDireccion(txtDireccion.getText().toUpperCase());
+            if (bInsertar.getText().equals("ELIMINAR")) {
+                controladorProveedor.deleteProveedor(proveedor, proveedor.getIdproveedor());
+                JOptionPane.showMessageDialog(null, "Se ha eliminado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
+                autoDestroy();
+
+            } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||
+                    (bInsertar.getText().equals("MODIFICAR"))) {
+
                 ok = controladorProveedor.validaciones(proveedor);
 
                 if (ok) {
@@ -51,21 +60,14 @@ public class VistaProveedores {
                         controladorProveedor.editProveedor(proveedor, proveedor.getIdproveedor());
                         JOptionPane.showMessageDialog(null, "Se ha modificado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
                         autoDestroy();
-                    } else if (bInsertar.getText().equals("BAJA")) {
-                        proveedor.setIdproveedor(Integer.parseInt(lbIDProveedor.getText()));
-                        controladorProveedor.deleteProveedor(proveedor, proveedor.getIdproveedor());
-                        JOptionPane.showMessageDialog(null, "Se ha eliminado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
-                        autoDestroy();
                     }
 
-                } else {
-                    JOptionPane.showMessageDialog(null, "Se han encontrado errores",
-                            "Resultado", JOptionPane.ERROR_MESSAGE
-                    );
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Se han encontrado errores",
+                        "Resultado", JOptionPane.ERROR_MESSAGE
+                );
             }
-
-
         });
 
 

@@ -56,7 +56,7 @@ public class ControladorPieza {
 
         Pieza p;
         tx = session.beginTransaction();
-        p = session.load(Pieza.class, Idpieza);
+        p = (Pieza) session.load(Pieza.class, Idpieza);
         session.delete(pieza);
         tx.commit();
         session.close();
@@ -83,14 +83,18 @@ public class ControladorPieza {
 
         //Control del codigo no duplicar valores
 
+
         List<Pieza> listado = new ArrayList<>();
         listado = selectAll();
-        if(!(p.getIdpieza() >=0 )){
+
         for (Pieza e : listado) {
             if (e.getCodpieza().equals(p.getCodpieza())) {
-                errores.put("Codigo", "Codigo duplicado");
+
+                if (!(p.getIdpieza() > 0)) {
+                    errores.put("Codigo", "Codigo duplicado");
+                }
             }
-        }}
+        }
 
         //Datos de tipo String
         if (p.getNombre().length() > 20 || p.getNombre().equals("")) {
@@ -119,11 +123,18 @@ public class ControladorPieza {
 
     public List<Pieza> selectAll() {
 
-        Query q = session.createQuery("from Pieza");
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
+        Query q = null;
+        q = session2.createQuery("from Pieza");
 
-        List<Pieza> listaPiezas = q.list();
+        List<Pieza> listaPiezas = new ArrayList<>();
+        listaPiezas.clear();
+        listaPiezas = q.list();
+
         Iterator<Pieza> iter = listaPiezas.iterator();
         List<Pieza> enviarListaPiezas = new ArrayList<>();
+        enviarListaPiezas.clear();
 
         while (iter.hasNext()) {
             Pieza pieza = (Pieza) iter.next();
@@ -135,38 +146,41 @@ public class ControladorPieza {
 
         }
 
+        session2.close();
         return enviarListaPiezas;
     }
 
     public Pieza selectPieza(int id) {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         Pieza p = new Pieza();
 
         try {
             p = (Pieza) session.load(Pieza.class, id);
-            pieza.setCodpieza(pieza.getCodpieza());
-            pieza.setNombre(pieza.getNombre());
-            pieza.setPrecio(pieza.getPrecio());
-            pieza.setDescripcion(pieza.getDescripcion());
+            //    pieza.setCodpieza(pieza.getCodpieza());
+            //    pieza.setNombre(pieza.getNombre());
+            //   pieza.setPrecio(pieza.getPrecio());
+            //   pieza.setDescripcion(pieza.getDescripcion());
 
         } catch (ObjectNotFoundException o) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 
-        session.close();
+        session2.close();
         return p;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         // Ejemplo consulta : select * from pieza where CODPIEZA like '%2a%';
 
         List<Pieza> listaEntontrados;
 
 
         //He tenido que construir la sentencia de esta forma. No me funcionaba :cod + q.setParameter
-        String consulta = "from " + tabla +"  where " + consultaDe + " like '%" + recibo + "%'";
+        String consulta = "from " + tabla + "  where " + consultaDe + " like '%" + recibo + "%'";
 
         // String consulta = "from Pieza  where codpieza like :cod";
         Query q = session.createQuery(consulta);
@@ -175,7 +189,7 @@ public class ControladorPieza {
         System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-
+        session2.close();
         return listaEntontrados;
     }
 

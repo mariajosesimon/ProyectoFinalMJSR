@@ -1,6 +1,8 @@
 package com.company.Vistas;
+
 import com.company.Controladores.ControladorPieza;
 import com.company.Pieza;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
@@ -13,7 +15,7 @@ public class VistaPiezas {
     private JList<Pieza> lstPiezas;
     private JScrollPane spListado;
 
-    private final ControladorPieza  controladorPieza = new ControladorPieza();
+    private final ControladorPieza controladorPieza = new ControladorPieza();
 
     public VistaPiezas() {
 
@@ -25,30 +27,39 @@ public class VistaPiezas {
 
             Pieza pieza = new Pieza();
 
-            pieza.setIdpieza(Integer.parseInt(String.valueOf(lbIDPieza.getText())));
+            if (!(lbIDPieza.getText().equals(""))) {
+                pieza.setIdpieza(Integer.parseInt(String.valueOf(lbIDPieza.getText())));
+            }
             pieza.setCodpieza(txtCodigo.getText().toUpperCase());
             pieza.setNombre(txtNombre.getText().toUpperCase());
             pieza.setPrecio(Double.parseDouble(txtPrecio.getText()));
             pieza.setDescripcion(txtDescripcion.getText().toUpperCase());
-            ok = controladorPieza.validaciones(pieza);
 
-            if (ok) {
-                if (bInsertar.getText().equalsIgnoreCase("INSERTAR")) {
-                    controladorPieza.addPieza(pieza);
-                    JOptionPane.showMessageDialog(null, "Se ha añadido la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
-                } else if (bInsertar.getText().equals("MODIFICAR")) {
-                    pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
-                    controladorPieza.editPieza(pieza, pieza.getIdpieza());
-                    JOptionPane.showMessageDialog(null, "Se ha modificado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
-                } else if (bInsertar.getText().equals("BAJA")) {
-                    pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
-                    controladorPieza.deletePieza(pieza, pieza.getIdpieza());
-                    JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
+            if (bInsertar.getText().equals("ELIMINAR")) {
+                controladorPieza.deletePieza(pieza, pieza.getIdpieza());
+                JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                autoDestroy();
+            } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||
+                    (bInsertar.getText().equals("MODIFICAR"))) {
+                ok = controladorPieza.validaciones(pieza);
+
+                if (ok) {
+                    if (bInsertar.getText().equalsIgnoreCase("INSERTAR")) {
+                        controladorPieza.addPieza(pieza);
+                        JOptionPane.showMessageDialog(null, "Se ha añadido la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        autoDestroy();
+                    } else if (bInsertar.getText().equals("MODIFICAR")) {
+                        pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
+                        controladorPieza.editPieza(pieza, pieza.getIdpieza());
+                        JOptionPane.showMessageDialog(null, "Se ha modificado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        autoDestroy();
+                    } else if (bInsertar.getText().equals("BAJA")) {
+                        pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
+                        controladorPieza.deletePieza(pieza, pieza.getIdpieza());
+                        JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        autoDestroy();
+                    }
                 }
-
             } else {
                 JOptionPane.showMessageDialog(null, "Se han encontrado errores",
                         "Resultado", JOptionPane.ERROR_MESSAGE
@@ -56,17 +67,14 @@ public class VistaPiezas {
             }
         });
 
-
         lstPiezas.addListSelectionListener(e -> {
             Pieza pieza = lstPiezas.getSelectedValue();
-
             if (pieza != null) {
                 lbIDPieza.setText(String.valueOf(pieza.getIdpieza()));
                 txtCodigo.setText(pieza.getCodpieza());
                 txtNombre.setText(pieza.getNombre());
                 txtPrecio.setText(String.valueOf(pieza.getPrecio()));
                 txtDescripcion.setText(pieza.getDescripcion());
-
             }
 
         });

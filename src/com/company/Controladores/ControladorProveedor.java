@@ -49,7 +49,7 @@ public class ControladorProveedor {
 
         Proveedor p;
         tx = session.beginTransaction();
-        p = session.load(Proveedor.class, Idproveedor);
+        p = (Proveedor) session.load(Proveedor.class, Idproveedor);
         session.delete(proveedor);
         tx.commit();
         session.close();
@@ -75,9 +75,9 @@ public class ControladorProveedor {
 
         List<Proveedor> listado = new ArrayList<>();
         listado = selectAll();
-        if (!(p.getIdproveedor() >= 0)) {
             for (Proveedor e : listado) {
                 if (e.getCodproveedor().equals(p.getCodproveedor())) {
+                    if(e.getIdproveedor() >=0 && e.getIdproveedor()<listado.size()) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
 
@@ -124,7 +124,8 @@ public class ControladorProveedor {
     }
 
     public List<Proveedor> selectAll() {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         Query q = session.createQuery("from Proveedor");
 
         List<Proveedor> listaProveedores = q.list();
@@ -141,31 +142,34 @@ public class ControladorProveedor {
 
         }
 
-
+        session2.close();
         return enviarListaProveedores;
     }
 
     public Proveedor selectProveedor(int id) {
 
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         Proveedor p = new Proveedor();
 
         try {
             p = (Proveedor) session.load(Proveedor.class, id);
-            proveedor.setCodproveedor(proveedor.getCodproveedor());
-            proveedor.setNombre(proveedor.getNombre());
-            proveedor.setApellidos(proveedor.getApellidos());
-            proveedor.setDireccion(proveedor.getDireccion());
+           // proveedor.setCodproveedor(p.getCodproveedor());
+        //    proveedor.setNombre(p.getNombre());
+        //    proveedor.setApellidos(p.getApellidos());
+         //   proveedor.setDireccion(p.getDireccion());
 
         } catch (ObjectNotFoundException o) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-
+        session2.close();
         return p;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
-
+        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
+        Session session2 = sesion2.openSession();
         // Ejemplo consulta : select * from Proveedor where CODProveedor like '%2a%';
 
         List<Proveedor> listaEntontrados;
@@ -181,7 +185,7 @@ public class ControladorProveedor {
         System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-
+        session2.close();
         return listaEntontrados;
     }
 

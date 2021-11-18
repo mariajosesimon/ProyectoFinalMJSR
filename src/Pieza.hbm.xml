@@ -20,11 +20,5 @@
         <property name="descripcion">
             <column name="DESCRIPCION" sql-type="varchar(150)" length="150" not-null="true"/>
         </property>
-        <set name="gestionsByIdpieza" inverse="true">
-            <key>
-                <column name="idpieza"/>
-            </key>
-            <one-to-many not-found="ignore" class="com.company.Gestion"/>
-        </set>
     </class>
 </hibernate-mapping>
