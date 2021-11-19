@@ -1,5 +1,7 @@
 package com.company.Vistas;
 
+import com.company.Controladores.ControladorProveedor;
+import com.company.Proveedor;
 import com.company.Proyecto;
 
 import javax.swing.*;
@@ -24,7 +26,9 @@ public class ListarProyectos {
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-        //    txtSupervisor.setText();
+            ControladorProveedor cp = new ControladorProveedor();
+            Proveedor proveedor = cp.selectProveedor(p.getSupervisor());
+            txtSupervisor.setText(proveedor.toString());
             activarbotones(0);
 
         });
@@ -40,7 +44,9 @@ public class ListarProyectos {
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            // txtSupervisor.setText(p.getSupervisor());
+            ControladorProveedor cp = new ControladorProveedor();
+            Proveedor proveedor = cp.selectProveedor(p.getSupervisor());
+            txtSupervisor.setText(proveedor.toString());
             activarbotones(siguiente);
 
 
@@ -55,7 +61,9 @@ public class ListarProyectos {
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            //  txtSupervisor.setText(p.getSupervisor());
+            ControladorProveedor cp = new ControladorProveedor();
+            Proveedor proveedor = cp.selectProveedor(p.getSupervisor());
+            txtSupervisor.setText(proveedor.toString());
 
             activarbotones(siguiente);
 
@@ -67,7 +75,9 @@ public class ListarProyectos {
             txtCodigo.setText(p.getCodproyecto());
             txtNombre.setText(p.getNombre());
             txtCiudad.setText(p.getCiudad());
-            //  txtSupervisor.setText(p.getSupervisor());
+            ControladorProveedor cp = new ControladorProveedor();
+            Proveedor proveedor = cp.selectProveedor(p.getSupervisor());
+            txtSupervisor.setText(proveedor.toString());
             activarbotones(siguiente);
 
         });
@@ -92,7 +102,9 @@ public class ListarProyectos {
         txtCodigo.setText(p.getCodproyecto());
         txtNombre.setText(p.getNombre());
         txtCiudad.setText(p.getCiudad());
-        //  txtSupervisor.setText(p.getSupervisor());
+        ControladorProveedor cp = new ControladorProveedor();
+        Proveedor proveedor = cp.selectProveedor(p.getSupervisor());
+        txtSupervisor.setText(proveedor.toString());
 
         return JPProyectoListado;
     }

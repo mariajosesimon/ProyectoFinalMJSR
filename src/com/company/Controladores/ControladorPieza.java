@@ -28,38 +28,42 @@ public class ControladorPieza {
     }
 
     public void addPieza(Pieza pieza) {
-        tx = session.beginTransaction();
-        session.save(pieza);
+        SessionFactory sesionAdd = HibernateUtil.getSessionFactory();
+        Session sessionAdd = sesionAdd.openSession();
+        tx = sessionAdd.beginTransaction();
+        sessionAdd.save(pieza);
         tx.commit();
-        session.close();
+        sessionAdd.close();
     }
 
     public void editPieza(Pieza pieza, int Idpieza) {
-
+        SessionFactory sesionEdit = HibernateUtil.getSessionFactory();
+        Session sessionEdit = sesionEdit.openSession();
         Pieza p;
-        tx = session.beginTransaction();
-        p = session.load(Pieza.class, Idpieza);
+        tx = sessionEdit.beginTransaction();
+        p = sessionEdit.load(Pieza.class, Idpieza);
         p.setIdpieza(pieza.getIdpieza());
         p.setNombre(pieza.getNombre());
         p.setPrecio(pieza.getPrecio());
         p.setCodpieza(pieza.getCodpieza());
         p.setDescripcion(pieza.getDescripcion());
 
-        session.update(p);
+        sessionEdit.update(p);
         tx.commit();
-        session.close();
+        sessionEdit.close();
 
 
     }
 
     public void deletePieza(Pieza pieza, int Idpieza) {
-
+        SessionFactory sesionDelete = HibernateUtil.getSessionFactory();
+        Session sessionDelete = sesionDelete.openSession();
         Pieza p;
-        tx = session.beginTransaction();
-        p = (Pieza) session.load(Pieza.class, Idpieza);
-        session.delete(pieza);
+        tx = sessionDelete.beginTransaction();
+        p = (Pieza) sessionDelete.load(Pieza.class, Idpieza);
+        sessionDelete.delete(pieza);
         tx.commit();
-        session.close();
+        sessionDelete.close();
     }
 
     public boolean validaciones(Pieza p) {
@@ -89,8 +93,7 @@ public class ControladorPieza {
 
         for (Pieza e : listado) {
             if (e.getCodpieza().equals(p.getCodpieza())) {
-
-                if (!(p.getIdpieza() > 0)) {
+                if (p.getIdpieza()== 0) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
             }
@@ -123,10 +126,10 @@ public class ControladorPieza {
 
     public List<Pieza> selectAll() {
 
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionSelectAll = HibernateUtil.getSessionFactory();
+        Session sessionSelectAll = sesionSelectAll.openSession();
         Query q = null;
-        q = session2.createQuery("from Pieza");
+        q = sessionSelectAll.createQuery("from Pieza");
 
         List<Pieza> listaPiezas = new ArrayList<>();
         listaPiezas.clear();
@@ -146,17 +149,17 @@ public class ControladorPieza {
 
         }
 
-        session2.close();
+        sessionSelectAll.close();
         return enviarListaPiezas;
     }
 
     public Pieza selectPieza(int id) {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionSelectId = HibernateUtil.getSessionFactory();
+        Session sessionSelectId = sesionSelectId.openSession();
         Pieza p = new Pieza();
 
         try {
-            p = (Pieza) session.load(Pieza.class, id);
+            p = (Pieza) sessionSelectId.load(Pieza.class, id);
             //    pieza.setCodpieza(pieza.getCodpieza());
             //    pieza.setNombre(pieza.getNombre());
             //   pieza.setPrecio(pieza.getPrecio());
@@ -167,13 +170,13 @@ public class ControladorPieza {
         }
 
 
-        session2.close();
+        sessionSelectId.close();
         return p;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionByCodigo = HibernateUtil.getSessionFactory();
+        Session sessionByCodigo = sesionByCodigo.openSession();
         // Ejemplo consulta : select * from pieza where CODPIEZA like '%2a%';
 
         List<Pieza> listaEntontrados;
@@ -183,13 +186,13 @@ public class ControladorPieza {
         String consulta = "from " + tabla + "  where " + consultaDe + " like '%" + recibo + "%'";
 
         // String consulta = "from Pieza  where codpieza like :cod";
-        Query q = session.createQuery(consulta);
+        Query q = sessionByCodigo.createQuery(consulta);
 
         //    q.setParameter("cod", "'%recibo%'");
         System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-        session2.close();
+        sessionByCodigo.close();
         return listaEntontrados;
     }
 

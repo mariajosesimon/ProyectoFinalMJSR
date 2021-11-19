@@ -25,36 +25,41 @@ public class ControladorProyecto {
     }
 
     public void addProyecto(Proyecto proyecto) {
-        tx = session.beginTransaction();
-        session.save(proyecto);
+        SessionFactory sesionAdd = HibernateUtil.getSessionFactory();
+        Session sessionAdd = sesionAdd.openSession();
+        tx = sessionAdd.beginTransaction();
+        sessionAdd.save(proyecto);
         tx.commit();
-        session.close();
+        sessionAdd.close();
 
     }
 
     public void editProyecto(Proyecto proyecto, int Idproyecto) {
-
+        SessionFactory sesionEdit = HibernateUtil.getSessionFactory();
+        Session sessionEdit = sesionEdit.openSession();
         Proyecto p;
-        tx = session.beginTransaction();
-        p = session.load(Proyecto.class, Idproyecto);
+        tx = sessionEdit.beginTransaction();
+        p = sessionEdit.load(Proyecto.class, Idproyecto);
         p.setIdproyecto(proyecto.getIdproyecto());
         p.setNombre(proyecto.getNombre());
         p.setCiudad(proyecto.getCiudad());
         p.setSupervisor(proyecto.getSupervisor());
 
 
-        session.update(p);
+        sessionEdit.update(p);
         tx.commit();
-        session.close();
+        sessionEdit.close();
     }
 
     public void deleteProyecto(Proyecto proyecto, int Idproyecto) {
+        SessionFactory sesionDelete = HibernateUtil.getSessionFactory();
+        Session sessionDelete = sesionDelete.openSession();
         Proyecto p;
-        tx = session.beginTransaction();
-        p = (Proyecto) session.load(Proyecto.class, Idproyecto);
-        session.delete(proyecto);
+        tx = sessionDelete.beginTransaction();
+        p = (Proyecto) sessionDelete.load(Proyecto.class, Idproyecto);
+        sessionDelete.delete(proyecto);
         tx.commit();
-        session.close();
+        sessionDelete.close();
     }
 
 
@@ -81,7 +86,7 @@ public class ControladorProyecto {
 
         for (Proyecto e : listado) {
             if (e.getCodproyecto().equals(p.getCodproyecto())) {
-                if (!(p.getIdproyecto() >= 0 && p.getIdproyecto() < listado.size())) {
+                if (p.getIdproyecto() == 0 ) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
             }
@@ -121,12 +126,12 @@ public class ControladorProyecto {
     }
 
     public List<Proyecto> selectAll() {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
-        Query q = session.createQuery("from Proyecto");
+        SessionFactory sesionSelectAll = HibernateUtil.getSessionFactory();
+        Session sessionSelectAll = sesionSelectAll.openSession();
+        Query q = sessionSelectAll.createQuery("from Proyecto");
 
-        List<Proyecto> listaProyectoes = q.list();
-        Iterator<Proyecto> iter = listaProyectoes.iterator();
+        List<Proyecto> listaProyectos = q.list();
+        Iterator<Proyecto> iter = listaProyectos.iterator();
         List<Proyecto> enviarListaProyectoes = new ArrayList<>();
 
         while (iter.hasNext()) {
@@ -134,22 +139,22 @@ public class ControladorProyecto {
             proyecto.setCodproyecto(proyecto.getCodproyecto());
             proyecto.setNombre(proyecto.getNombre());
             proyecto.setCiudad(proyecto.getCiudad());
-            //  proyecto.setSupervisor(proyecto.getSupervisor());
+            proyecto.setSupervisor(proyecto.getSupervisor());
             enviarListaProyectoes.add(proyecto);
 
         }
 
-        session2.close();
+        sessionSelectAll.close();
         return enviarListaProyectoes;
     }
 
     public Proyecto selectProyecto(int id) {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
-        Proyecto p = new Proyecto();
+        SessionFactory sesionSelectId = HibernateUtil.getSessionFactory();
+        Session sessionSelectId = sesionSelectId.openSession();
+        Proyecto proyecto = new Proyecto();
 
         try {
-            p = (Proyecto) session.load(Proyecto.class, id);
+            proyecto = (Proyecto) sessionSelectId.load(Proyecto.class, id);
             proyecto.setCodproyecto(proyecto.getCodproyecto());
             proyecto.setNombre(proyecto.getNombre());
             proyecto.setCiudad(proyecto.getCiudad());
@@ -161,15 +166,15 @@ public class ControladorProyecto {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        session2.close();
-        return p;
+        sessionSelectId.close();
+        return proyecto;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
 
         // Ejemplo consulta : select * from Proyecto where CODProyecto like '%2a%';
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionByCodigo = HibernateUtil.getSessionFactory();
+        Session sessionByCodigo = sesionByCodigo.openSession();
         List<Proyecto> listaEntontrados;
 
 
@@ -177,13 +182,13 @@ public class ControladorProyecto {
         String consulta = "from " + tabla + " where " + consultaDe + " like '%" + recibo + "%'";
 
         // String consulta = "from Proyecto  where codProyecto like :cod";
-        Query q = session.createQuery(consulta);
+        Query q = sessionByCodigo.createQuery(consulta);
 
         //    q.setParameter("cod", "'%recibo%'");
         System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-        session2.close();
+        sessionByCodigo.close();
         return listaEntontrados;
     }
 

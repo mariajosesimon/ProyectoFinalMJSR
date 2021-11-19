@@ -227,7 +227,7 @@ public class VentanaInicio {
             modificacion.renombrar("MODIFICAR");
             modificacion.getSpListado().setVisible(true);
             modificacion.getLbListaPiezas().setVisible(true);
-            //cpieza = new ControladorPieza();
+
             modificacion.mostrarPiezas(cpieza.selectAll());
             if (cpieza.selectAll().size() > 0) {
                 mostrarPanel(modificacion.getJPPieza());

@@ -21,38 +21,42 @@ public class ControladorProveedor {
     }
 
     public void addProveedor(Proveedor proveedor) {
-        tx = session.beginTransaction();
+        SessionFactory sesionAdd = HibernateUtil.getSessionFactory();
+        Session sessionAdd = sesionAdd.openSession();
+        tx = sessionAdd.beginTransaction();
         session.save(proveedor);
         tx.commit();
-        session.close();
+        sessionAdd.close();
     }
 
     public void editProveedor(Proveedor proveedor, int Idproveedor) {
-
+        SessionFactory sesionEdit = HibernateUtil.getSessionFactory();
+        Session sessionEdit = sesionEdit.openSession();
         Proveedor p;
-        tx = session.beginTransaction();
-        p = session.load(Proveedor.class, Idproveedor);
+        tx = sessionEdit.beginTransaction();
+        p = sessionEdit.load(Proveedor.class, Idproveedor);
         p.setIdproveedor(proveedor.getIdproveedor());
         p.setNombre(proveedor.getNombre());
         p.setApellidos(proveedor.getApellidos());
         p.setCodproveedor(proveedor.getCodproveedor());
         p.setDireccion(proveedor.getDireccion());
 
-        session.update(p);
+        sessionEdit.update(p);
         tx.commit();
-        session.close();
+        sessionEdit.close();
 
 
     }
 
     public void deleteProveedor(Proveedor proveedor, int Idproveedor) {
-
+        SessionFactory sesionDelete = HibernateUtil.getSessionFactory();
+        Session sessionDelete = sesionDelete.openSession();
         Proveedor p;
-        tx = session.beginTransaction();
-        p = (Proveedor) session.load(Proveedor.class, Idproveedor);
-        session.delete(proveedor);
+        tx = sessionDelete.beginTransaction();
+        p = (Proveedor) sessionDelete.load(Proveedor.class, Idproveedor);
+        sessionDelete.delete(proveedor);
         tx.commit();
-        session.close();
+        sessionDelete.close();
     }
 
     public boolean validaciones(Proveedor p) {
@@ -77,7 +81,7 @@ public class ControladorProveedor {
         listado = selectAll();
             for (Proveedor e : listado) {
                 if (e.getCodproveedor().equals(p.getCodproveedor())) {
-                    if(e.getIdproveedor() >=0 && e.getIdproveedor()<listado.size()) {
+                    if(e.getIdproveedor() ==0  ){
                     errores.put("Codigo", "Codigo duplicado");
                 }
 
@@ -124,9 +128,9 @@ public class ControladorProveedor {
     }
 
     public List<Proveedor> selectAll() {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
-        Query q = session.createQuery("from Proveedor");
+        SessionFactory sesionSelectAll = HibernateUtil.getSessionFactory();
+        Session sessionSelectAll = sesionSelectAll.openSession();
+        Query q = sessionSelectAll.createQuery("from Proveedor");
 
         List<Proveedor> listaProveedores = q.list();
         Iterator<Proveedor> iter = listaProveedores.iterator();
@@ -142,34 +146,34 @@ public class ControladorProveedor {
 
         }
 
-        session2.close();
+        sessionSelectAll.close();
         return enviarListaProveedores;
     }
 
     public Proveedor selectProveedor(int id) {
 
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionSelectId = HibernateUtil.getSessionFactory();
+        Session sessionSelectId = sesionSelectId.openSession();
         Proveedor p = new Proveedor();
 
         try {
-            p = (Proveedor) session.load(Proveedor.class, id);
-           // proveedor.setCodproveedor(p.getCodproveedor());
-        //    proveedor.setNombre(p.getNombre());
-        //    proveedor.setApellidos(p.getApellidos());
-         //   proveedor.setDireccion(p.getDireccion());
+            p = (Proveedor) sessionSelectId.load(Proveedor.class, id);
+            p.setCodproveedor(p.getCodproveedor());
+            p.setNombre(p.getNombre());
+            p.setApellidos(p.getApellidos());
+            p.setDireccion(p.getDireccion());
 
         } catch (ObjectNotFoundException o) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        session2.close();
+        sessionSelectId.close();
         return p;
     }
 
     public List selectByCodigo(String recibo, String consultaDe, String tabla) {
-        SessionFactory sesion2 = HibernateUtil.getSessionFactory();
-        Session session2 = sesion2.openSession();
+        SessionFactory sesionByCodigo = HibernateUtil.getSessionFactory();
+        Session sessionByCodigo = sesionByCodigo.openSession();
         // Ejemplo consulta : select * from Proveedor where CODProveedor like '%2a%';
 
         List<Proveedor> listaEntontrados;
@@ -179,14 +183,15 @@ public class ControladorProveedor {
         String consulta = "from " + tabla + " where " + consultaDe + " like '%" + recibo + "%'";
 
         // String consulta = "from Proveedor  where codProveedor like :cod";
-        Query q = session.createQuery(consulta);
+        Query q = sessionByCodigo.createQuery(consulta);
 
         //    q.setParameter("cod", "'%recibo%'");
-        System.out.println(q.getQueryString());
+       // System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
-        session2.close();
+        sessionByCodigo.close();
         return listaEntontrados;
     }
+
 
 }

@@ -51,6 +51,7 @@ public class VistaProyectos {
             proyecto.setNombre(txtNombre.getText().toUpperCase());
             proyecto.setCiudad(txtCiudad.getText().toUpperCase());
             Proveedor p = (Proveedor)cbSupervisor.getSelectedItem();
+            assert p != null;
             proyecto.setSupervisor(p.getIdproveedor());
 
             if (bInsertar.getText().equals("ELIMINAR")) {
@@ -96,9 +97,9 @@ public class VistaProyectos {
                 txtNombre.setText(proyecto.getNombre());
                 txtCiudad.setText(proyecto.getCiudad());
                 ControladorProveedor cp = new ControladorProveedor();
-                System.out.println("Supervisor" + proyecto.getSupervisor());
+             //   System.out.println("Supervisor" + proyecto.getSupervisor());
                 Proveedor proveedor = cp.selectProveedor(proyecto.getSupervisor());
-                System.out.println(proveedor.toString());
+             //   System.out.println(proveedor.toString());
                 cbSupervisor.setSelectedItem(proveedor);
             }
 
