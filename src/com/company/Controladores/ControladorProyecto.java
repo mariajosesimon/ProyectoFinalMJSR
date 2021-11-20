@@ -1,8 +1,6 @@
 package com.company.Controladores;
 
-
 import com.company.Pieza;
-import com.company.Proveedor;
 import com.company.Proyecto;
 import com.company.utils.HibernateUtil;
 import org.hibernate.ObjectNotFoundException;
@@ -44,8 +42,6 @@ public class ControladorProyecto {
         p.setNombre(proyecto.getNombre());
         p.setCiudad(proyecto.getCiudad());
         p.setSupervisor(proyecto.getSupervisor());
-
-
         sessionEdit.update(p);
         tx.commit();
         sessionEdit.close();
@@ -191,5 +187,22 @@ public class ControladorProyecto {
         return listaEntontrados;
     }
 
+    public int isInGestion(int idProyecto) {
+        SessionFactory sesionInGestion = HibernateUtil.getSessionFactory();
+        Session sessionInGestion = sesionInGestion.openSession();
+        Proyecto p = new Proyecto();
+        int existe = 0;
 
+
+        //select count(*) from proyecto where supervisor = 4;
+        //  SELECT EXISTS(SELECT supervisor FROM proyecto WHERE SUPERVISOR = idProveedor) --> no se puede utilizar.
+
+        String consulta = "select count(*) from Gestionglobal where idProyecto = " + idProyecto;
+        Long qexist = (Long) sessionInGestion.createQuery(consulta).uniqueResult();
+        existe = qexist.intValue();
+        sessionInGestion.close();
+        return existe;
+
+
+    }
 }

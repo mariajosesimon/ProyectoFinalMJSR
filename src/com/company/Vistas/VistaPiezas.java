@@ -36,12 +36,20 @@ public class VistaPiezas {
             pieza.setDescripcion(txtDescripcion.getText().toUpperCase());
 
             if (bInsertar.getText().equals("ELIMINAR")) {
-                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar la pieza?", "Alerta!", JOptionPane.YES_NO_OPTION);
 
-                if(resp == 0) {
-                  controladorPieza.deletePieza(pieza, pieza.getIdpieza());
-                  JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
-              }
+                int puedoEliminarGestion = controladorPieza.isInGestion(pieza.getIdpieza());
+
+                if (puedoEliminarGestion == 0) {
+                    int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar la pieza?", "Alerta!", JOptionPane.YES_NO_OPTION);
+
+                    if (resp == 0) {
+                        controladorPieza.deletePieza(pieza, pieza.getIdpieza());
+                        JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se puede eliminar la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                }
                 autoDestroy();
             } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||
                     (bInsertar.getText().equals("MODIFICAR"))) {
@@ -56,11 +64,6 @@ public class VistaPiezas {
                         pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
                         controladorPieza.editPieza(pieza, pieza.getIdpieza());
                         JOptionPane.showMessageDialog(null, "Se ha modificado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
-                        autoDestroy();
-                    } else if (bInsertar.getText().equals("BAJA")) {
-                        pieza.setIdpieza(Integer.parseInt(lbIDPieza.getText()));
-                        controladorPieza.deletePieza(pieza, pieza.getIdpieza());
-                        JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
                         autoDestroy();
                     }
                 }
@@ -83,16 +86,17 @@ public class VistaPiezas {
 
         });
 
+        // Comprobacion si pulsa determinadas teclas el usuario. No permite letras.
         txtPrecio.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-
                 char validar = e.getKeyChar();
                 if ((validar < '0' || validar > '9') && (validar < '.' || validar > '.')) {
                     txtPrecio.setText("");
                     JOptionPane.showMessageDialog(null, "Solo numeros y  punto . ");
                 }
             }
+
 
         });
 

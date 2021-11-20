@@ -1,7 +1,9 @@
 package com.company.Vistas;
 
 import com.company.Controladores.*;
+import com.company.Pieza;
 import com.company.Proveedor;
+import com.company.Proyecto;
 import com.company.utils.HibernateUtil;
 
 import org.hibernate.*;
@@ -23,7 +25,10 @@ public class VentanaInicio {
     private ControladorPieza cpieza = new ControladorPieza();
     private ControladorProveedor cproveedor = new ControladorProveedor();
     private ControladorProyecto cproyecto = new ControladorProyecto();
+    private ControladorGestionGlobal cGG = new ControladorGestionGlobal();
     private List<Proveedor> listadoProveedores = new ArrayList<>();
+    private List<Pieza> listadoPiezas = new ArrayList<>();
+    private List<Proyecto> listadoProyectos = new ArrayList<>();
 
 
     public VentanaInicio(JFrame frame) {
@@ -106,25 +111,42 @@ public class VentanaInicio {
         MenuProyectos.add(itemConsultaProyectos);
         menuBar.add(MenuProyectos);
 
-        /*****************************************************************************/
+        /**
+        /***********************Menu Gestion Global*********************/
 
         JMenu MenuGestionGlobal = new JMenu("Gestión Global");
-        JMenu MenuAyuda = new JMenu("Ayuda");
-        JMenuItem mostrarAyuda = new JMenuItem("Ayuda");
-        MenuAyuda.add(mostrarAyuda);
+        JMenuItem itemAltaGestionGlobal = new JMenuItem("Alta");
+        JMenuItem itemModificacionGestionGlobal = new JMenuItem("Modificacion");
+        JMenuItem itemBajaGestionGlobal = new JMenuItem("Eliminar");
+        JMenuItem itemListadoGestionGlobal = new JMenuItem("Listado");
+
+        MenuGestionGlobal.add(itemAltaGestionGlobal);
+        MenuGestionGlobal.add(itemModificacionGestionGlobal);
+        MenuGestionGlobal.add(itemBajaGestionGlobal);
+        MenuGestionGlobal.add(itemListadoGestionGlobal);
+
+        menuBar.add(MenuGestionGlobal);
+
+        /***************************************************************************/
 
 
-        JMenuItem itemPPP = new JMenuItem("Pieza, Proveedores y Proyectos");
+        JMenu Varios = new JMenu("Varios");
+
         JMenuItem itemSuministrosProveedor = new JMenuItem("Suministros por Proveedor");
         JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Pieza");
         JMenuItem itemEstadisticas = new JMenuItem("Estadísticas");
 
-        MenuGestionGlobal.add(itemPPP);
-        MenuGestionGlobal.add(itemSuministrosProveedor);
-        MenuGestionGlobal.add(itemSuministrosPiezas);
-        MenuGestionGlobal.add(itemEstadisticas);
 
-        menuBar.add(MenuGestionGlobal);
+        Varios.add(itemSuministrosProveedor);
+        Varios.add(itemSuministrosPiezas);
+        Varios.add(itemEstadisticas);
+
+        menuBar.add(Varios);
+
+        JMenu MenuAyuda = new JMenu("Ayuda");
+        JMenuItem mostrarAyuda = new JMenuItem("Ayuda");
+        MenuAyuda.add(mostrarAyuda);
+
         menuBar.add(MenuAyuda);
 
         frame.add(menuBar); //Añadir el menu bar al frame. Se tiene que añadir al frame principal porque de este se arrastra a todos.
@@ -348,19 +370,77 @@ public class VentanaInicio {
         });
 
 
-        /** Menu Gestion Global  */
-        itemPPP.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        /******************************* Menu Gestion Global  ********************************/
+
+        itemAltaGestionGlobal.addActionListener(e -> {
+            listadoProveedores = cproveedor.selectAll();
+            listadoPiezas = cpieza.selectAll();
+            listadoProyectos = cproyecto.selectAll();
+            VistaGestionGlobal alta = new VistaGestionGlobal(listadoProveedores, listadoPiezas, listadoProyectos);
+            alta.renombrar("INSERTAR");
+            alta.getTxtIdGG().setVisible(false);
+            alta.getLbId().setVisible(false);
+            mostrarPanel(alta.getJPGestionGlobal());
+
+        });
+        itemModificacionGestionGlobal.addActionListener(e -> {
+            listadoProveedores = cproveedor.selectAll();
+            listadoPiezas = cpieza.selectAll();
+            listadoProyectos = cproyecto.selectAll();
+            VistaGestionGlobal modificacion = new VistaGestionGlobal(listadoProveedores, listadoPiezas, listadoProyectos);
+            modificacion.mostrarGestiones(cGG.selectAll());
+            modificacion.renombrar("MODIFICAR");
+            modificacion.getCbPieza().setEnabled(false);
+            modificacion.getCbProveedor().setEnabled(false);
+            modificacion.getCbProyecto().setEnabled(false);
+            if (cGG.selectAll().size() > 0) {
+                                mostrarPanel(modificacion.getJPGestionGlobal());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
 
             }
+
+        });
+        itemBajaGestionGlobal.addActionListener(e -> {
+            listadoProveedores = cproveedor.selectAll();
+            listadoPiezas = cpieza.selectAll();
+            listadoProyectos = cproyecto.selectAll();
+            VistaGestionGlobal eliminar = new VistaGestionGlobal(listadoProveedores, listadoPiezas, listadoProyectos);
+            eliminar.renombrar("ELIMINAR");
+            eliminar.getCbPieza().setEnabled(false);
+            eliminar.getCbProveedor().setEnabled(false);
+            eliminar.getCbProyecto().setEnabled(false);
+            eliminar.getTxtCantidad().setEnabled(false);
+
+            eliminar.mostrarGestiones(cGG.selectAll());
+            if (cGG.selectAll().size() > 0) {
+                mostrarPanel(eliminar.getJPGestionGlobal());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        });
+        itemListadoGestionGlobal.addActionListener(e -> {
+           /* ListarGestionGlobal listado = new ListarGestionGlobal();
+            listado.setListaGestionGlobal(cGestionGlobal.selectAll());
+
+            if (cGestionGlobal.selectAll().size() > 0) {
+                mostrarPanel(listado.getJPGestionGlobalListado());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+
+            }*/
+
         });
 
-        itemSuministrosProveedor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        /********************************* VARIOS *********************************************/
 
-            }
+
+        itemSuministrosProveedor.addActionListener(e -> {
+            listadoProveedores = cproveedor.selectAll();
+            SuministrosProveedor sproveedor = new SuministrosProveedor(listadoProveedores);
+            mostrarPanel(sproveedor.getJPSuministrosProveedor());
+
         });
 
         itemSuministrosPiezas.addActionListener(new ActionListener() {

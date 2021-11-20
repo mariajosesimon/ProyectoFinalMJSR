@@ -26,8 +26,10 @@ public class VistaProyectos {
 
     public VistaProyectos(List<Proveedor> listadoProveedores) {
 
+        /*En este momento cargo el combobox de los proveedores. */
         if (listadoProveedores.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se han encontrado datos", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            autoDestroy();
         } else {
             cbSupervisor.removeAllItems(); //Limpiamos el combobox
             //rellenamos con los datos recibidos.
@@ -54,8 +56,19 @@ public class VistaProyectos {
             proyecto.setSupervisor(p.getIdproveedor());
 
             if (bInsertar.getText().equals("ELIMINAR")) {
-                controladorProyecto.deleteProyecto(proyecto, proyecto.getIdproyecto());
-                JOptionPane.showMessageDialog(null, "Se ha eliminado el proyecto.", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                int puedoEliminarGestion = controladorProyecto.isInGestion(proyecto.getIdproyecto());
+                if (puedoEliminarGestion == 0) {
+                    int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proyecto?", "Alerta!", JOptionPane.YES_NO_OPTION);
+                    if (resp == 0) {
+                        controladorProyecto.deleteProyecto(proyecto, proyecto.getIdproyecto());
+                        JOptionPane.showMessageDialog(null, "Se ha eliminado el proyecto.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                    }else{
+                    JOptionPane.showMessageDialog(null, "No se puede eliminar el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                }
                 autoDestroy();
 
             } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||
@@ -65,11 +78,10 @@ public class VistaProyectos {
 
                 if (ok) {
                     if (bInsertar.getText().equalsIgnoreCase("INSERTAR")) {
-                        int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proyecto?", "Alerta!", JOptionPane.YES_NO_OPTION);
-                        if (resp == 0) {
-                            controladorProyecto.addProyecto(proyecto);
-                            JOptionPane.showMessageDialog(null, "Se ha añadido el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
-                        }
+
+                        controladorProyecto.addProyecto(proyecto);
+                        JOptionPane.showMessageDialog(null, "Se ha añadido el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
+
                         autoDestroy();
                     } else if (bInsertar.getText().equals("MODIFICAR")) {
                         proyecto.setIdproyecto(Integer.parseInt(lbIDProyecto.getText()));
@@ -99,9 +111,8 @@ public class VistaProyectos {
                 txtNombre.setText(proyecto.getNombre());
                 txtCiudad.setText(proyecto.getCiudad());
                 ControladorProveedor cp = new ControladorProveedor();
-                //   System.out.println("Supervisor" + proyecto.getSupervisor());
                 Proveedor proveedor = cp.selectProveedor(proyecto.getSupervisor());
-                //   System.out.println(proveedor.toString());
+
                 cbSupervisor.setSelectedItem(proveedor);
             }
 

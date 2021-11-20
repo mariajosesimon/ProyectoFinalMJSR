@@ -24,7 +24,7 @@ public class ControladorProveedor {
         SessionFactory sesionAdd = HibernateUtil.getSessionFactory();
         Session sessionAdd = sesionAdd.openSession();
         tx = sessionAdd.beginTransaction();
-        session.save(proveedor);
+        sessionAdd.save(proveedor);
         tx.commit();
         sessionAdd.close();
     }
@@ -150,6 +150,7 @@ public class ControladorProveedor {
         return enviarListaProveedores;
     }
 
+
     public Proveedor selectProveedor(int id) {
 
         SessionFactory sesionSelectId = HibernateUtil.getSessionFactory();
@@ -210,5 +211,25 @@ public class ControladorProveedor {
         return existe;
 
     }
+
+    public int isInGestion(int idProveedor) {
+        SessionFactory sesionInGestion = HibernateUtil.getSessionFactory();
+        Session sessionInGestion = sesionInGestion.openSession();
+        Proveedor p = new Proveedor();
+        int existe = 0;
+
+
+        //select count(*) from proyecto where supervisor = 4;
+        //  SELECT EXISTS(SELECT supervisor FROM proyecto WHERE SUPERVISOR = idProveedor) --> no se puede utilizar.
+
+        String consulta = "select count(*) from Gestionglobal where idProveedor = " + idProveedor;
+        Long qexist = (Long) sessionInGestion.createQuery(consulta).uniqueResult();
+        existe = qexist.intValue();
+        sessionInGestion.close();
+        return existe;
+
+    }
+
+
 
 }

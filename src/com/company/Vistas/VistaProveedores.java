@@ -43,12 +43,10 @@ public class VistaProveedores {
             if (bInsertar.getText().equals("ELIMINAR")) {
                 /*Si intento eliminar un proveedor que está en un proyecto no deberia dejarme*/
 
-                int puedoEliminar = -1;
+                int puedoEliminarProyecto = controladorProveedor.isInProyect(proveedor.getIdproveedor());
+                int puedoEliminarGestion = controladorProveedor.isInGestion(proveedor.getIdproveedor());
 
-                 puedoEliminar = controladorProveedor.isInProyect(proveedor.getIdproveedor());
-
-
-                if (puedoEliminar == 0) {
+                if (puedoEliminarProyecto == 0 && puedoEliminarGestion == 0) {
 
                     int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proveedor?", "Alerta!", JOptionPane.YES_NO_OPTION);
 
