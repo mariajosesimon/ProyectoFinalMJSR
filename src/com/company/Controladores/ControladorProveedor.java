@@ -79,9 +79,9 @@ public class ControladorProveedor {
 
         List<Proveedor> listado = new ArrayList<>();
         listado = selectAll();
-            for (Proveedor e : listado) {
-                if (e.getCodproveedor().equals(p.getCodproveedor())) {
-                    if(e.getIdproveedor() ==0  ){
+        for (Proveedor e : listado) {
+            if (e.getCodproveedor().equals(p.getCodproveedor())) {
+                if (e.getIdproveedor() == 0) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
 
@@ -186,12 +186,29 @@ public class ControladorProveedor {
         Query q = sessionByCodigo.createQuery(consulta);
 
         //    q.setParameter("cod", "'%recibo%'");
-       // System.out.println(q.getQueryString());
+        // System.out.println(q.getQueryString());
 
         listaEntontrados = q.list();
         sessionByCodigo.close();
         return listaEntontrados;
     }
 
+    public int isInProyect(int idProveedor) {
+        SessionFactory sesionInProyecto = HibernateUtil.getSessionFactory();
+        Session sessionInProyecto = sesionInProyecto.openSession();
+        Proveedor p = new Proveedor();
+        int existe = 0;
+
+
+        //select count(*) from proyecto where supervisor = 4;
+        //  SELECT EXISTS(SELECT supervisor FROM proyecto WHERE SUPERVISOR = idProveedor) --> no se puede utilizar.
+
+        String consulta = "select count(*) from Proyecto where supervisor = " + idProveedor;
+        Long qexist = (Long) sessionInProyecto.createQuery(consulta).uniqueResult();
+        existe = qexist.intValue();
+        sessionInProyecto.close();
+        return existe;
+
+    }
 
 }

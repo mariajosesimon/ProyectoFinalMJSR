@@ -24,10 +24,9 @@ public class VistaProyectos {
     private List<Proveedor> listadoProveedores = new ArrayList<>();
 
 
-
     public VistaProyectos(List<Proveedor> listadoProveedores) {
 
-        if (listadoProveedores.size()==0) {
+        if (listadoProveedores.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se han encontrado datos", "Resultado", JOptionPane.INFORMATION_MESSAGE);
         } else {
             cbSupervisor.removeAllItems(); //Limpiamos el combobox
@@ -50,7 +49,7 @@ public class VistaProyectos {
             proyecto.setCodproyecto(txtCodigo.getText().toUpperCase());
             proyecto.setNombre(txtNombre.getText().toUpperCase());
             proyecto.setCiudad(txtCiudad.getText().toUpperCase());
-            Proveedor p = (Proveedor)cbSupervisor.getSelectedItem();
+            Proveedor p = (Proveedor) cbSupervisor.getSelectedItem();
             assert p != null;
             proyecto.setSupervisor(p.getIdproveedor());
 
@@ -64,23 +63,26 @@ public class VistaProyectos {
 
                 ok = controladorProyecto.validaciones(proyecto);
 
-            if (ok) {
-                if (bInsertar.getText().equalsIgnoreCase("INSERTAR")) {
-                    controladorProyecto.addProyecto(proyecto);
-                    JOptionPane.showMessageDialog(null, "Se ha añadido el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
-                } else if (bInsertar.getText().equals("MODIFICAR")) {
-                    proyecto.setIdproyecto(Integer.parseInt(lbIDProyecto.getText()));
-                    controladorProyecto.editProyecto(proyecto, proyecto.getIdproyecto());
-                    JOptionPane.showMessageDialog(null, "Se ha modificado el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
-                } else if (bInsertar.getText().equals("BAJA")) {
-                    proyecto.setIdproyecto(Integer.parseInt(lbIDProyecto.getText()));
-                    //  controladorProyecto.deleteProyecto(proyecto, proyecto.getIdproyecto());
-                    JOptionPane.showMessageDialog(null, "Se ha eliminado el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    autoDestroy();
+                if (ok) {
+                    if (bInsertar.getText().equalsIgnoreCase("INSERTAR")) {
+                        int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proyecto?", "Alerta!", JOptionPane.YES_NO_OPTION);
+                        if (resp == 0) {
+                            controladorProyecto.addProyecto(proyecto);
+                            JOptionPane.showMessageDialog(null, "Se ha añadido el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        autoDestroy();
+                    } else if (bInsertar.getText().equals("MODIFICAR")) {
+                        proyecto.setIdproyecto(Integer.parseInt(lbIDProyecto.getText()));
+                        controladorProyecto.editProyecto(proyecto, proyecto.getIdproyecto());
+                        JOptionPane.showMessageDialog(null, "Se ha modificado el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        autoDestroy();
+                    } else if (bInsertar.getText().equals("ELIMINAR")) {
+                        proyecto.setIdproyecto(Integer.parseInt(lbIDProyecto.getText()));
+                        //  controladorProyecto.deleteProyecto(proyecto, proyecto.getIdproyecto());
+                        JOptionPane.showMessageDialog(null, "Se ha eliminado el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        autoDestroy();
+                    }
                 }
-            }
             } else {
                 JOptionPane.showMessageDialog(null, "Se han encontrado errores",
                         "Resultado", JOptionPane.ERROR_MESSAGE
@@ -97,9 +99,9 @@ public class VistaProyectos {
                 txtNombre.setText(proyecto.getNombre());
                 txtCiudad.setText(proyecto.getCiudad());
                 ControladorProveedor cp = new ControladorProveedor();
-             //   System.out.println("Supervisor" + proyecto.getSupervisor());
+                //   System.out.println("Supervisor" + proyecto.getSupervisor());
                 Proveedor proveedor = cp.selectProveedor(proyecto.getSupervisor());
-             //   System.out.println(proveedor.toString());
+                //   System.out.println(proveedor.toString());
                 cbSupervisor.setSelectedItem(proveedor);
             }
 
@@ -145,6 +147,7 @@ public class VistaProyectos {
     public JLabel getLbIDProyecto() {
         return lbIDProyecto;
     }
+
     public JComboBox getCbSupervisor() {
         return cbSupervisor;
     }

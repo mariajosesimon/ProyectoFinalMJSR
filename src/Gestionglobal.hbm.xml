@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.company.Gestionglobal" table="gestionglobal" schema="tallermjsr">
+        <id name="idGestionGlobal">
+            <column name="idGestionGlobal" sql-type="int"/>
+        </id>
+        <property name="idProveedor">
+            <column name="idProveedor" sql-type="int"/>
+        </property>
+        <property name="idPieza">
+            <column name="idPieza" sql-type="int"/>
+        </property>
+        <property name="idProyecto">
+            <column name="idProyecto" sql-type="int"/>
+        </property>
+        <property name="cantidad">
+            <column name="cantidad" sql-type="int"/>
+        </property>
+        <many-to-one name="proveedorByIdProveedor" class="com.company.Proveedor" insert="false" update="false">
+            <column name="idProveedor"/>
+        </many-to-one>
+        <many-to-one name="piezaByIdPieza" class="com.company.Pieza" insert="false" update="false">
+            <column name="idPieza"/>
+        </many-to-one>
+        <many-to-one name="proyectoByIdProyecto" class="com.company.Proyecto" insert="false" update="false">
+            <column name="idProyecto"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

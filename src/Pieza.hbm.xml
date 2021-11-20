@@ -20,5 +20,11 @@
         <property name="descripcion">
             <column name="DESCRIPCION" sql-type="varchar(150)" length="150" not-null="true"/>
         </property>
+        <set name="gestionglobalsByIdpieza" inverse="true">
+            <key>
+                <column name="idPieza"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.company.Gestionglobal"/>
+        </set>
     </class>
 </hibernate-mapping>

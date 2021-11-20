@@ -1,6 +1,7 @@
 package com.company.Controladores;
 
 import com.company.Pieza;
+import com.company.Proveedor;
 import com.company.utils.HibernateUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -93,7 +94,7 @@ public class ControladorPieza {
 
         for (Pieza e : listado) {
             if (e.getCodpieza().equals(p.getCodpieza())) {
-                if (p.getIdpieza()== 0) {
+                if (p.getIdpieza() == 0) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
             }
@@ -160,10 +161,10 @@ public class ControladorPieza {
 
         try {
             p = (Pieza) sessionSelectId.load(Pieza.class, id);
-            //    pieza.setCodpieza(pieza.getCodpieza());
-            //    pieza.setNombre(pieza.getNombre());
-            //   pieza.setPrecio(pieza.getPrecio());
-            //   pieza.setDescripcion(pieza.getDescripcion());
+            p.setCodpieza(p.getCodpieza());
+            p.setNombre(p.getNombre());
+            p.setPrecio(p.getPrecio());
+            p.setDescripcion(p.getDescripcion());
 
         } catch (ObjectNotFoundException o) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado nada", "Error", JOptionPane.ERROR_MESSAGE);
@@ -194,6 +195,24 @@ public class ControladorPieza {
         listaEntontrados = q.list();
         sessionByCodigo.close();
         return listaEntontrados;
+    }
+
+    public int isInGestion(int idPieza) {
+        SessionFactory sesionInGestion = HibernateUtil.getSessionFactory();
+        Session sessionInGestion = sesionInGestion.openSession();
+        Pieza p = new Pieza();
+        int existe = 0;
+
+
+        //select count(*) from proyecto where supervisor = 4;
+        //  SELECT EXISTS(SELECT supervisor FROM proyecto WHERE SUPERVISOR = idProveedor) --> no se puede utilizar.
+
+        String consulta = "select count(*) from Gestionglobal where idPieza = " + idPieza;
+        Long qexist = (Long) sessionInGestion.createQuery(consulta).uniqueResult();
+        existe = qexist.intValue();
+        sessionInGestion.close();
+        return existe;
+
     }
 
 }

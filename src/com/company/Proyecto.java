@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +12,7 @@ public class Proyecto {
     private String ciudad;
     private Integer supervisor;
     private Proveedor proveedorBySupervisor;
+    private Collection<Gestionglobal> gestionglobalsByIdproyecto;
 
     @Id
     @Column(name = "idproyecto", nullable = false)
@@ -84,10 +86,19 @@ public class Proyecto {
     public void setProveedorBySupervisor(Proveedor proveedorBySupervisor) {
         this.proveedorBySupervisor = proveedorBySupervisor;
     }
+
     @Override
     public String toString() {
         return codproyecto + " --> " + nombre + " - " + ciudad ;
 
     }
 
+    @OneToMany(mappedBy = "proyectoByIdProyecto")
+    public Collection<Gestionglobal> getGestionglobalsByIdproyecto() {
+        return gestionglobalsByIdproyecto;
+    }
+
+    public void setGestionglobalsByIdproyecto(Collection<Gestionglobal> gestionglobalsByIdproyecto) {
+        this.gestionglobalsByIdproyecto = gestionglobalsByIdproyecto;
+    }
 }

@@ -1,9 +1,7 @@
 package com.company;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +11,7 @@ public class Pieza {
     private String nombre;
     private double precio;
     private String descripcion;
+    private Collection<Gestionglobal> gestionglobalsByIdpieza;
 
     @Id
     @Column(name = "IDPIEZA", nullable = false)
@@ -76,8 +75,21 @@ public class Pieza {
     public int hashCode() {
         return Objects.hash(idpieza, codpieza, nombre, precio, descripcion);
     }
+
     @Override
     public String toString() {
         return codpieza + " --> " + nombre + " - " + precio + "€ - " + descripcion;
     }
+
+    @OneToMany(mappedBy = "piezaByIdPieza")
+    public Collection<Gestionglobal> getGestionglobalsByIdpieza() {
+        return gestionglobalsByIdpieza;
+    }
+
+    public void setGestionglobalsByIdpieza(Collection<Gestionglobal> gestionglobalsByIdpieza) {
+        this.gestionglobalsByIdpieza = gestionglobalsByIdpieza;
+    }
+
+
+
 }

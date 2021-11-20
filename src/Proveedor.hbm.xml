@@ -20,6 +20,12 @@
         <property name="direccion">
             <column name="DIRECCION" sql-type="varchar(40)" length="40" not-null="true"/>
         </property>
+        <set name="gestionglobalsByIdproveedor" inverse="true">
+            <key>
+                <column name="idProveedor"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.company.Gestionglobal"/>
+        </set>
         <set name="proyectosByIdproveedor" inverse="true">
             <key>
                 <column name="SUPERVISOR" not-null="true"/>

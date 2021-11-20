@@ -23,5 +23,11 @@
         <many-to-one name="proveedorBySupervisor" class="com.company.Proveedor" insert="false" update="false">
             <column name="SUPERVISOR" not-null="true"/>
         </many-to-one>
+        <set name="gestionglobalsByIdproyecto" inverse="true">
+            <key>
+                <column name="idProyecto"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.company.Gestionglobal"/>
+        </set>
     </class>
 </hibernate-mapping>

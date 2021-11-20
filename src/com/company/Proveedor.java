@@ -12,6 +12,7 @@ public class Proveedor {
     private String apellidos;
     private String direccion;
     private Collection<Proyecto> proyectosByIdproveedor;
+    private Collection<Gestionglobal> gestionglobalsByIdproveedor;
 
     @Id
     @Column(name = "IDPROVEEDOR", nullable = false)
@@ -84,9 +85,19 @@ public class Proveedor {
     public void setProyectosByIdproveedor(Collection<Proyecto> proyectosByIdproveedor) {
         this.proyectosByIdproveedor = proyectosByIdproveedor;
     }
+
     @Override
     public String toString() {
         return codproveedor + " --> " + nombre + " - " + apellidos + " - " + direccion;
 
+    }
+
+    @OneToMany(mappedBy = "proveedorByIdProveedor")
+    public Collection<Gestionglobal> getGestionglobalsByIdproveedor() {
+        return gestionglobalsByIdproveedor;
+    }
+
+    public void setGestionglobalsByIdproveedor(Collection<Gestionglobal> gestionglobalsByIdproveedor) {
+        this.gestionglobalsByIdproveedor = gestionglobalsByIdproveedor;
     }
 }

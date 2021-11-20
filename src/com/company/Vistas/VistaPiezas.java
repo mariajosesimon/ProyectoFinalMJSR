@@ -36,8 +36,12 @@ public class VistaPiezas {
             pieza.setDescripcion(txtDescripcion.getText().toUpperCase());
 
             if (bInsertar.getText().equals("ELIMINAR")) {
-                controladorPieza.deletePieza(pieza, pieza.getIdpieza());
-                JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar la pieza?", "Alerta!", JOptionPane.YES_NO_OPTION);
+
+                if(resp == 0) {
+                  controladorPieza.deletePieza(pieza, pieza.getIdpieza());
+                  JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
+              }
                 autoDestroy();
             } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||
                     (bInsertar.getText().equals("MODIFICAR"))) {

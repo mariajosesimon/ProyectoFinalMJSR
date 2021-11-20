@@ -41,8 +41,25 @@ public class VistaProveedores {
 
 
             if (bInsertar.getText().equals("ELIMINAR")) {
-                controladorProveedor.deleteProveedor(proveedor, proveedor.getIdproveedor());
-                JOptionPane.showMessageDialog(null, "Se ha eliminado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
+                /*Si intento eliminar un proveedor que está en un proyecto no deberia dejarme*/
+
+                int puedoEliminar = -1;
+
+                 puedoEliminar = controladorProveedor.isInProyect(proveedor.getIdproveedor());
+
+
+                if (puedoEliminar == 0) {
+
+                    int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proveedor?", "Alerta!", JOptionPane.YES_NO_OPTION);
+
+                    if (resp == 0) {
+                        controladorProveedor.deleteProveedor(proveedor, proveedor.getIdproveedor());
+                        JOptionPane.showMessageDialog(null, "Se ha eliminado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se puede eliminar el proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                }
                 autoDestroy();
 
             } else if (bInsertar.getText().equalsIgnoreCase("INSERTAR") ||

@@ -21,6 +21,8 @@
         <mapping resource="Proveedor.hbm.xml"/>
         <mapping class="com.company.Proyecto"/>
         <mapping resource="Proyecto.hbm.xml"/>
+        <mapping class="com.company.Gestionglobal"/>
+        <mapping resource="Gestionglobal.hbm.xml"/>
 
 
         <!-- <property name="connection.username"/> -->

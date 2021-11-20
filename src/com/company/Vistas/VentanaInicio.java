@@ -283,6 +283,7 @@ public class VentanaInicio {
         itemAltaProyecto.addActionListener(e -> {
             listadoProveedores = cproveedor.selectAll();
             VistaProyectos alta = new VistaProyectos(listadoProveedores);
+            alta.renombrar("INSERTAR");
             alta.getSpListado().setVisible(false);
             alta.getLbListaProyectos().setVisible(false);
             alta.getLbId().setVisible(false);
@@ -304,7 +305,15 @@ public class VentanaInicio {
 
         });
         itemBajaProyecto.addActionListener(e -> {
-
+            listadoProveedores = cproveedor.selectAll();
+            VistaProyectos eliminar = new VistaProyectos(listadoProveedores);
+            eliminar.renombrar("ELIMINAR");
+            eliminar.mostrarProyectos(cproyecto.selectAll());
+            if (cproyecto.selectAll().size() > 0) {
+                mostrarPanel(eliminar.getJPProyecto());
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
+            }
 
         });
         itemListadoProyecto.addActionListener(e -> {

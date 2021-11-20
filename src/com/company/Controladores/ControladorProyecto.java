@@ -62,7 +62,6 @@ public class ControladorProyecto {
         sessionDelete.close();
     }
 
-
     public boolean validaciones(Proyecto p) {
 
 
