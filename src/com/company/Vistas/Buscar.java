@@ -73,7 +73,7 @@ public class Buscar {
                         "Codigo proyecto: " + py.getCodproyecto() + "\n" +
                                 "Nombre: " + py.getNombre() + "\n" +
                                 "Ciudad: " + py.getCiudad() + "\n" +
-                                "Supervisor: " + py.getSupervisor());
+                                "Proveedor: " + py.getSupervisor());
             }
         });
 
