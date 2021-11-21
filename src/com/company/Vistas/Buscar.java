@@ -1,6 +1,8 @@
 package com.company.Vistas;
 
 import com.company.Controladores.ControladorPieza;
+import com.company.Controladores.ControladorProveedor;
+import com.company.Controladores.ControladorProyecto;
 import com.company.Pieza;
 import com.company.Proveedor;
 import com.company.Proyecto;
@@ -17,8 +19,9 @@ public class Buscar {
     private JTextArea txtDatos;
     private JComboBox<String> cbEncontrados;
     ControladorPieza controladorPieza = new ControladorPieza();
-    
-    List<Pieza> listadoPiezas = new ArrayList<>();
+    ControladorProveedor controladorProveedor = new ControladorProveedor();
+    ControladorProyecto controladorProyecto = new ControladorProyecto();
+    List listado = new ArrayList<>();
     String consulta;
     String tabla;
 
@@ -28,15 +31,20 @@ public class Buscar {
 
             txtDatos.setText("");
 
+            if (tabla.equals("Pieza")) {
+                listado = controladorPieza.selectByCodigo(txtBuscar.getText().toUpperCase(), consulta, tabla);
+            } else if (tabla.equals("Proveedor")) {
+                listado = controladorProveedor.selectByCodigo(txtBuscar.getText().toUpperCase(), consulta, tabla);
+            } else if (tabla.equals("Proyecto")) {
+                listado = controladorProveedor.selectByCodigo(txtBuscar.getText().toUpperCase(), consulta, tabla);
+            }
 
-            listadoPiezas = controladorPieza.selectByCodigo(txtBuscar.getText().toUpperCase(), consulta, tabla);
-
-            if (listadoPiezas.size() == 0) {
+            if (listado.size() == 0) {
                 JOptionPane.showMessageDialog(null, "No se han encontrado datos", "Resultado", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 cbEncontrados.removeAllItems(); //Limpiamos el combobox
                 //rellenamos con los datos recibidos.
-                cbEncontrados.setModel(new DefaultComboBoxModel(listadoPiezas.toArray()));
+                cbEncontrados.setModel(new DefaultComboBoxModel(listado.toArray()));
             }
         });
 
