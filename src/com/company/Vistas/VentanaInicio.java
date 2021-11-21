@@ -9,13 +9,8 @@ import com.company.utils.HibernateUtil;
 import org.hibernate.*;
 
 import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.rmi.MarshalledObject;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class VentanaInicio {
 
@@ -34,12 +29,6 @@ public class VentanaInicio {
     public VentanaInicio(JFrame frame) {
 
         JMenuBar menuBar = new JMenuBar();
-
-        /********************Menu Base de datos*****************/
-        JMenu MenuBaseDatos = new JMenu("Base de Datos");
-        JMenuItem mostrarBD = new JMenuItem("Base de datos");
-        MenuBaseDatos.add(mostrarBD);
-        menuBar.add(MenuBaseDatos);
 
         /********************Menu Pieza*****************/
         JMenu MenuPiezas = new JMenu("Pieza");
@@ -112,18 +101,18 @@ public class VentanaInicio {
         menuBar.add(MenuProyectos);
 
         /**
-        /***********************Menu Gestion Global*********************/
+         /***********************Menu Gestion Global*********************/
 
         JMenu MenuGestionGlobal = new JMenu("Gestión Global");
         JMenuItem itemAltaGestionGlobal = new JMenuItem("Alta");
         JMenuItem itemModificacionGestionGlobal = new JMenuItem("Modificacion");
         JMenuItem itemBajaGestionGlobal = new JMenuItem("Eliminar");
-        JMenuItem itemListadoGestionGlobal = new JMenuItem("Listado");
+        //  JMenuItem itemListadoGestionGlobal = new JMenuItem("Listado");
 
         MenuGestionGlobal.add(itemAltaGestionGlobal);
         MenuGestionGlobal.add(itemModificacionGestionGlobal);
         MenuGestionGlobal.add(itemBajaGestionGlobal);
-        MenuGestionGlobal.add(itemListadoGestionGlobal);
+        //  MenuGestionGlobal.add(itemListadoGestionGlobal);
 
         menuBar.add(MenuGestionGlobal);
 
@@ -161,10 +150,7 @@ public class VentanaInicio {
             Ayuda ayuda = new Ayuda();
             mostrarPanel(ayuda.getJPAyuda());
         });
-        mostrarBD.addActionListener(e -> {
-            BaseDatos bd = new BaseDatos();
-            mostrarPanel(bd.getJPBaseDatos());
-        });
+
         /**************************** PROVEEDORES ****************************************/
 
 
@@ -394,7 +380,7 @@ public class VentanaInicio {
             modificacion.getCbProveedor().setEnabled(false);
             modificacion.getCbProyecto().setEnabled(false);
             if (cGG.selectAll().size() > 0) {
-                                mostrarPanel(modificacion.getJPGestionGlobal());
+                mostrarPanel(modificacion.getJPGestionGlobal());
             } else {
                 JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
 
@@ -420,18 +406,7 @@ public class VentanaInicio {
             }
 
         });
-        itemListadoGestionGlobal.addActionListener(e -> {
-           /* ListarGestionGlobal listado = new ListarGestionGlobal();
-            listado.setListaGestionGlobal(cGestionGlobal.selectAll());
 
-            if (cGestionGlobal.selectAll().size() > 0) {
-                mostrarPanel(listado.getJPGestionGlobalListado());
-            } else {
-                JOptionPane.showMessageDialog(null, "No hay datos que mostrar", "OH!", JOptionPane.INFORMATION_MESSAGE);
-
-            }*/
-
-        });
 
         /********************************* VARIOS *********************************************/
 
@@ -443,18 +418,17 @@ public class VentanaInicio {
 
         });
 
-        itemSuministrosPiezas.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        itemSuministrosPiezas.addActionListener(e -> {
+            listadoPiezas = cpieza.selectAll();
+            SuministrosPiezas spiezas = new SuministrosPiezas(listadoPiezas);
+            mostrarPanel(spiezas.getJPPiezas());
 
-
-            }
         });
 
-        itemEstadisticas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        itemEstadisticas.addActionListener(e -> {
+            Estadisticas estadisticas = new Estadisticas();
+            mostrarPanel(estadisticas.getJPEstadisticas());
 
-            }
         });
 
 
@@ -478,16 +452,11 @@ public class VentanaInicio {
         return JPGeneral;
     }
 
-    public JPanel getJPVacio() {
-        return JPVacio;
-    }
 
     public static void main(String[] args) {
         /**
          * Arrancamos la aplicacion desde este punto.
          * */
-        SessionFactory sesion = HibernateUtil.getSessionFactory();
-        Session session = sesion.openSession();
 
         JFrame frame = new JFrame("El taller de Mª Jose");
 

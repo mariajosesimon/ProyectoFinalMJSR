@@ -46,7 +46,7 @@ public class ListarPiezas {
         });
         bSiguiente.addActionListener(e -> {
 
-            if (siguiente < listaPiezas.size()-1) {
+            if (siguiente < listaPiezas.size() - 1) {
                 siguiente++;
             }
             Pieza p = listaPiezas.get(siguiente);
@@ -59,7 +59,7 @@ public class ListarPiezas {
 
         });
         bUltimo.addActionListener(e -> {
-            siguiente = listaPiezas.size()-1;
+            siguiente = listaPiezas.size() - 1;
             Pieza p = listaPiezas.get(siguiente);
             lbIDPieza.setText(String.valueOf(p.getIdpieza()));
             txtNombre.setText(p.getNombre());
@@ -100,12 +100,12 @@ public class ListarPiezas {
             bAnterior.setEnabled(false);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
-        } else if (id > 0 && id < listaPiezas.size()-1) {
+        } else if (id > 0 && id < listaPiezas.size() - 1) {
             bPrimero.setEnabled(true);
             bAnterior.setEnabled(true);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
-        } else if (id == listaPiezas.size()-1) {
+        } else if (id == listaPiezas.size() - 1) {
             bPrimero.setEnabled(true);
             bAnterior.setEnabled(true);
             bSiguiente.setEnabled(false);

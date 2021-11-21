@@ -12,7 +12,7 @@ public class Ayuda {
     private JLabel lbTitulo;
 
 
-    public Ayuda(){
+    public Ayuda() {
 
         bVolver.addActionListener(new ActionListener() {
             @Override
@@ -21,6 +21,7 @@ public class Ayuda {
             }
         });
     }
+
     public void autoDestroy() {
         JPAyuda.removeAll();
         JPAyuda.repaint();
@@ -28,8 +29,8 @@ public class Ayuda {
 
     public JPanel getJPAyuda() {
         txtDatos.setText("" +
-                "AUTORA: MARIA JOSE SIMON RODRIGUEZ" +"\n"+
-                "CURSO: 3 DESARROLLO DE APLICACIONES MULTIPLATAFORMA" +"\n"+
+                "AUTORA: MARIA JOSE SIMON RODRIGUEZ" + "\n" +
+                "CURSO: 3 DESARROLLO DE APLICACIONES MULTIPLATAFORMA" + "\n" +
                 "ASIGNATURA: ACCESO A DATOS");
         return JPAyuda;
     }

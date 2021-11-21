@@ -150,7 +150,6 @@ public class ControladorProveedor {
         return enviarListaProveedores;
     }
 
-
     public Proveedor selectProveedor(int id) {
 
         SessionFactory sesionSelectId = HibernateUtil.getSessionFactory();
@@ -229,7 +228,6 @@ public class ControladorProveedor {
         return existe;
 
     }
-
 
 
 }

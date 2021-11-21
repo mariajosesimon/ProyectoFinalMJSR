@@ -45,7 +45,7 @@ public class ListarProveedores {
 
         });
         bSiguiente.addActionListener(e -> {
-            if (siguiente < listaProveedores.size()-1) {
+            if (siguiente < listaProveedores.size() - 1) {
                 siguiente++;
             }
 
@@ -60,7 +60,7 @@ public class ListarProveedores {
 
         });
         bUltimo.addActionListener(e -> {
-            siguiente = listaProveedores.size()-1;
+            siguiente = listaProveedores.size() - 1;
             Proveedor p = listaProveedores.get(siguiente);
             lbIDProveedor.setText(String.valueOf(p.getIdproveedor()));
             txtCodigo.setText(p.getCodproveedor());
@@ -103,12 +103,12 @@ public class ListarProveedores {
             bAnterior.setEnabled(false);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
-        } else if (id > 0 && id < listaProveedores.size()-1) {
+        } else if (id > 0 && id < listaProveedores.size() - 1) {
             bPrimero.setEnabled(true);
             bAnterior.setEnabled(true);
             bSiguiente.setEnabled(true);
             bUltimo.setEnabled(true);
-        } else if (id == listaProveedores.size()-1) {
+        } else if (id == listaProveedores.size() - 1) {
             bPrimero.setEnabled(true);
             bAnterior.setEnabled(true);
             bSiguiente.setEnabled(false);

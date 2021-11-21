@@ -1,13 +1,9 @@
 package com.company.Vistas;
 
 import com.company.Controladores.ControladorGestionGlobal;
-import com.company.Pieza;
 import com.company.Proveedor;
-import com.company.Proyecto;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +16,12 @@ public class SuministrosProveedor {
     private JButton bVolver;
     private JPanel JPGeneral;
     private JLabel lbTitulo;
+    private JScrollPane JSTabla;
+    private JLabel lbTituloPiezasSuministradas;
     private List<Proveedor> listaProveedores = new ArrayList<>();
+    private JTable tbProveedores;
+    private ControladorGestionGlobal cGG = new ControladorGestionGlobal();
+    private int idProve = 0;
 
     public SuministrosProveedor(List<Proveedor> listaProveedores) {
 
@@ -37,12 +38,15 @@ public class SuministrosProveedor {
             for (Proveedor prov : listaProveedores) {
                 cbProveedor.addItem(prov.getCodproveedor());
             }
-
-
         }
 
 
         bVer.addActionListener(e -> {
+
+            tbProveedores = new JTable();
+            JSTabla.setViewportView(tbProveedores);
+            List<Object[]> resultado = cGG.tablaProveedor(idProve);
+            tbProveedores.setModel(new TablaProveedor(resultado));
 
 
         });
@@ -54,10 +58,9 @@ public class SuministrosProveedor {
                     txtNombre.setText(proveedor.getNombre());
                     txtApellidos.setText(proveedor.getApellidos());
                     txtDireccion.setText(proveedor.getDireccion());
-
-                    ControladorGestionGlobal cGG = new ControladorGestionGlobal();
                     txtPiezasTotal.setText(String.valueOf(cGG.piezasPorProveedor(proveedor.getIdproveedor())));
                     txtProyectosTotal.setText(String.valueOf(cGG.proyectosPorProveedor(proveedor.getIdproveedor())));
+                    idProve = proveedor.getIdproveedor(); // valor que pasamos a la consulta para que nos muestre los datos en la tabla
                 }
             }
 

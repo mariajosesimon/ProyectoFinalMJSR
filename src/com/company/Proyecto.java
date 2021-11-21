@@ -89,7 +89,7 @@ public class Proyecto {
 
     @Override
     public String toString() {
-        return codproyecto + " --> " + nombre + " - " + ciudad ;
+        return codproyecto + " --> " + nombre + " - " + ciudad;
 
     }
 

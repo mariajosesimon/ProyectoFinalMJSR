@@ -65,7 +65,7 @@ public class VistaProyectos {
                         JOptionPane.showMessageDialog(null, "Se ha eliminado el proyecto.", "Info", JOptionPane.INFORMATION_MESSAGE);
                     }
 
-                    }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No se puede eliminar el proyecto", "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 }

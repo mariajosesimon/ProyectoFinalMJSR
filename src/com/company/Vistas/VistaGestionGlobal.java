@@ -78,8 +78,9 @@ public class VistaGestionGlobal {
                 //Comprobamos que cantidad tiene dato y sea mayor de 0
                 boolean ok;
 
-                try{
-                gestionGlobal.setCantidad(Integer.parseInt(txtCantidad.getText()));}catch (NumberFormatException n){
+                try {
+                    gestionGlobal.setCantidad(Integer.parseInt(txtCantidad.getText()));
+                } catch (NumberFormatException n) {
                     JOptionPane.showMessageDialog(null, "La cantidad no puede ser vacia", "Error de formato", JOptionPane.ERROR_MESSAGE);
                 }
                 ok = cGG.validaciones(gestionGlobal);
@@ -90,7 +91,7 @@ public class VistaGestionGlobal {
                         JOptionPane.showMessageDialog(null, "Se ha añadido la gestión", "Info", JOptionPane.INFORMATION_MESSAGE);
                         autoDestroy();
 
-                    } else /*es modificar*/{
+                    } else /*es modificar*/ {
                         gestionGlobal.setIdGestionGlobal(Integer.parseInt(txtIdGG.getText()));
                         cGG.editGestionGlobal(gestionGlobal, gestionGlobal.getIdGestionGlobal());
                         JOptionPane.showMessageDialog(null, "Se ha modificado la gestión", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -98,7 +99,7 @@ public class VistaGestionGlobal {
                     }
                 }
 
-              //  autoDestroy();
+                //  autoDestroy();
             } else {
                 JOptionPane.showMessageDialog(null, "Se han encontrado errores",
                         "Resultado", JOptionPane.ERROR_MESSAGE
@@ -150,9 +151,9 @@ public class VistaGestionGlobal {
                 }
             }
         });
-        lstGG.addListSelectionListener(e-> {
+        lstGG.addListSelectionListener(e -> {
             Gestionglobal gg = (Gestionglobal) lstGG.getSelectedValue();
-            if(gg != null){
+            if (gg != null) {
                 txtIdGG.setText(String.valueOf(gg.getIdGestionGlobal()));
                 txtCantidad.setText(String.valueOf(gg.getCantidad()));
 

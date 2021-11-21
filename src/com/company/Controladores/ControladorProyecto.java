@@ -81,7 +81,7 @@ public class ControladorProyecto {
 
         for (Proyecto e : listado) {
             if (e.getCodproyecto().equals(p.getCodproyecto())) {
-                if (p.getIdproyecto() == 0 ) {
+                if (p.getIdproyecto() == 0) {
                     errores.put("Codigo", "Codigo duplicado");
                 }
             }
@@ -153,8 +153,6 @@ public class ControladorProyecto {
             proyecto.setCodproyecto(proyecto.getCodproyecto());
             proyecto.setNombre(proyecto.getNombre());
             proyecto.setCiudad(proyecto.getCiudad());
-
-
 
 
         } catch (ObjectNotFoundException o) {

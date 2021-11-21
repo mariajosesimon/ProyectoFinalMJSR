@@ -17,16 +17,9 @@ public class VistaProveedores {
 
     private ControladorProveedor controladorProveedor = new ControladorProveedor();
 
-
     public VistaProveedores() {
 
-
-        bCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                autoDestroy();
-            }
-        });
+        bCancelar.addActionListener(e -> autoDestroy());
         bInsertar.addActionListener(e -> {
 
             boolean ok = false;  // comprobamos en los controladores si ha pasado todas las validaciones cada objeto y si es true puede continuar
@@ -54,7 +47,7 @@ public class VistaProveedores {
                         controladorProveedor.deleteProveedor(proveedor, proveedor.getIdproveedor());
                         JOptionPane.showMessageDialog(null, "Se ha eliminado la Proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No se puede eliminar el proveedor", "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 }
@@ -85,7 +78,6 @@ public class VistaProveedores {
             }
         });
 
-
         lstProveedores.addListSelectionListener(e -> {
             Proveedor Proveedor = lstProveedores.getSelectedValue();
 
@@ -101,7 +93,6 @@ public class VistaProveedores {
         });
 
     }
-
 
     public JPanel getJPProveedor() {
         return JPProveedor;

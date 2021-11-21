@@ -32,7 +32,7 @@ public class VistaPiezas {
             }
             pieza.setCodpieza(txtCodigo.getText().toUpperCase());
             pieza.setNombre(txtNombre.getText().toUpperCase());
-            pieza.setPrecio(Double.parseDouble(txtPrecio.getText()));
+            pieza.setPrecio(Float.parseFloat(txtPrecio.getText()));
             pieza.setDescripcion(txtDescripcion.getText().toUpperCase());
 
             if (bInsertar.getText().equals("ELIMINAR")) {
@@ -46,7 +46,7 @@ public class VistaPiezas {
                         controladorPieza.deletePieza(pieza, pieza.getIdpieza());
                         JOptionPane.showMessageDialog(null, "Se ha eliminado la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No se puede eliminar la pieza", "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 }
@@ -105,6 +105,7 @@ public class VistaPiezas {
 
 
     public JPanel getJPPieza() {
+        txtPrecio.setText(String.valueOf(0.0));
         return JPPieza;
     }
 
